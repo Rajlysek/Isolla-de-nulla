@@ -9,8 +9,9 @@ public:
 	float positionX;
 	float positionY;
 	sf::RectangleShape playerShape;
+	int health;
 	void move();
-	void borderCollision(float x, float y);
+	void borderCollision(int x, int y);
 
 };
 

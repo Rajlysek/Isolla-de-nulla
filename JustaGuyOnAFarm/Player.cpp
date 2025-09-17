@@ -64,7 +64,7 @@ void Player::move()
 		}
 	}
 }
-void Player::borderCollision(float x, float y)
+void Player::borderCollision(int x, int y)
 {
 	if (positionX <= 0)
 	{

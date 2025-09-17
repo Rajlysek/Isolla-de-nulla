@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Player.h"
+#include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -7,13 +8,21 @@ bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
 void buttonCreation(sf::RectangleShape& button, sf::Vector2f size, sf::Vector2f position);
 using namespace sf;
-int width = 800;
-int height = 600;
+
+
+
 
 int main()
 {
     // Create the main window
-    RenderWindow window(VideoMode({ 800, 600 }), "SFML window", Style::Default);
+	auto desktop = VideoMode::getDesktopMode();
+    unsigned int width = desktop.size.x;
+    unsigned int height = desktop.size.y;
+    float menuWidth = (int)width / 10 * 4;
+    float menuHeight = (int)height / 10;
+    float buttonWidth = (int)width / 10 * 2;
+    float buttonHeight = (int)height / 10;
+    RenderWindow window(VideoMode({ width, height }), "SFML window", State::Fullscreen);
     window.setFramerateLimit(60);
     //creating menu buttons
     RectangleShape buttonMenu;
@@ -23,10 +32,10 @@ int main()
     RectangleShape buttonBack;
     RectangleShape setttingsMenu;
     //button properties
-    buttonCreation(buttonMenu, { 200.f, 50.f }, { 300.f,100.f });
-    buttonCreation(buttonSettings, { 200.f, 50.f }, { 300.f,200.f });
-    buttonCreation(buttonQuit, { 200.f, 50.f }, { 300.f,300.f });
-    buttonCreation(buttonTryAgain, { 800.f, 600.f }, { 0.f,0.f });
+    buttonCreation(buttonMenu, { buttonWidth, buttonHeight }, { menuWidth,menuHeight });
+    buttonCreation(buttonSettings, { buttonWidth, buttonHeight }, { menuWidth, menuHeight*3 });
+    buttonCreation(buttonQuit, { buttonWidth, buttonHeight }, { menuWidth, menuHeight*5 });
+    buttonCreation(buttonTryAgain, { buttonWidth, 600.f }, { 0.f,0.f });
     buttonCreation(buttonBack, { 50.f, 50.f }, { 50.f,50.f });
     buttonCreation(setttingsMenu, { 600.f, 400.f }, { 100.f,100.f });
     buttonTryAgain.setFillColor(Color::Red);
@@ -34,8 +43,8 @@ int main()
 
     //player creation
     Player player;
-    player.positionX = 400.f;
-    player.positionY = 300.f;
+    player.positionX = width / 2;
+    player.positionY = height / 2;
     player.playerShape.setSize({ 50.f, 50.f });
     player.playerShape.setPosition({ player.positionX, player.positionY });
 
@@ -72,6 +81,11 @@ int main()
         {
             window.close();
         }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
+        {
+            game = false;
+            screenMenu = true;
+        }
 
 
 
@@ -105,7 +119,7 @@ int main()
         }
         if (game == true) {
             player.move();
-            player.borderCollision(800, 600);
+            player.borderCollision((int)width, (int)height);
             window.draw(player.playerShape);
 
         }
