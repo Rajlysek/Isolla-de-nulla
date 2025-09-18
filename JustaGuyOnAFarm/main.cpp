@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
 void buttonCreation(sf::RectangleShape& button, sf::Vector2f size, sf::Vector2f position);
@@ -14,7 +15,7 @@ using namespace sf;
 
 int main()
 {
-    // Create the main window
+	// Create the main window and get desktop resolution
 	auto desktop = VideoMode::getDesktopMode();
     unsigned int width = desktop.size.x;
     unsigned int height = desktop.size.y;
@@ -24,14 +25,16 @@ int main()
     float buttonHeight = (int)height / 10;
     RenderWindow window(VideoMode({ width, height }), "SFML window", State::Fullscreen);
     window.setFramerateLimit(60);
-    //creating menu buttons
+
+	//creating menu buttons and settings menu
     RectangleShape buttonMenu;
     RectangleShape buttonSettings;
     RectangleShape buttonQuit;
     RectangleShape buttonTryAgain;
     RectangleShape buttonBack;
     RectangleShape setttingsMenu;
-    //button properties
+
+	//button properties and creation
     buttonCreation(buttonMenu, { buttonWidth, buttonHeight }, { menuWidth,menuHeight });
     buttonCreation(buttonSettings, { buttonWidth, buttonHeight }, { menuWidth, menuHeight*3 });
     buttonCreation(buttonQuit, { buttonWidth, buttonHeight }, { menuWidth, menuHeight*5 });
@@ -41,12 +44,22 @@ int main()
     buttonTryAgain.setFillColor(Color::Red);
     setttingsMenu.setFillColor(Color::Blue);
 
+	
+
+
+    Texture bg("mapa.png");
+    Sprite background(bg);
+    background.setTexture(bg);
+    background.setPosition(Vector2f(0, 0));
+
     //player creation
     Player player;
-    player.positionX = width / 2;
-    player.positionY = height / 2;
-    player.playerShape.setSize({ 50.f, 50.f });
-    player.playerShape.setPosition({ player.positionX, player.positionY });
+	player.playerCreation(width / 2.f, height / 2.f);
+
+    //background
+    View view;
+	view.setCenter(Vector2(player.positionX, player.positionY));
+	view.setSize(Vector2f(width, height));
 
 
 
@@ -120,8 +133,10 @@ int main()
         if (game == true) {
             player.move();
             player.borderCollision((int)width, (int)height);
+			view.setCenter(Vector2(player.positionX, player.positionY));
+			window.draw(background);
+            window.setView(view);
             window.draw(player.playerShape);
-
         }
 
 

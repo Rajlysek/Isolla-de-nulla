@@ -84,3 +84,12 @@ void Player::borderCollision(int x, int y)
 		positionY = y - 50;
 	}
 }
+
+void Player::playerCreation(float posX, float posY)
+{
+	positionX = posX / 2;
+	positionY = posY / 2;
+	playerShape.setSize({ 50.f, 50.f });
+	playerShape.setPosition({ positionX, positionY });
+	health = 100;
+}

@@ -12,6 +12,7 @@ public:
 	int health;
 	void move();
 	void borderCollision(int x, int y);
+	void playerCreation(float posX, float posY);
 
 };
 
