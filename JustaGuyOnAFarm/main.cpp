@@ -60,6 +60,7 @@ int main()
     View view;
 	view.setCenter(Vector2(player.positionX, player.positionY));
 	view.setSize(Vector2f(width, height));
+    View view2;
 
 
 
@@ -127,6 +128,9 @@ int main()
             window.draw(buttonQuit);
         }
         if (settings == true) {
+            view2.setCenter(Vector2f(width/2, height /2 ));
+            view2.setSize(Vector2f(width, height));
+            window.setView(view2);
             window.draw(setttingsMenu);
             window.draw(buttonBack);
         }
