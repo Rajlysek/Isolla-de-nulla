@@ -77,7 +77,23 @@ void Player::move()
 			playerShape.setPosition({ positionX, positionY });
 		}
 	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
+			float x = 0.f;
+			positionX += x;
+			float y = 0.f;
+			positionY += y;
+			playerShape.setPosition({ positionX, positionY });
 
+		}
+		else {
+			float x = 0.f;
+			positionX += x;
+			float y = 0.f;
+			positionY += y;
+			playerShape.setPosition({ positionX, positionY });
+		}
+	}
 
 
 

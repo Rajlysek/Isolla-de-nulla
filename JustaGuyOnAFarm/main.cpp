@@ -46,24 +46,34 @@ int main()
 
 	
 
-
+	//background creations
     Texture bg("mapa.png");
     Sprite background(bg);
     background.setTexture(bg);
     background.setPosition(Vector2f(0, 0));
+	float bgWidth = bg.getSize().x;
+	float bgHeight = bg.getSize().y;
 
-    //player creation
+    //player creations A
     Player player;
+	player.playerSizeX = 50.f;
+	player.playerSizeY = 50.f;
 	player.playerCreation(width / 2.f, height / 2.f);
 
-    //background
+	
+
+    //camera view
     View view;
 	view.setCenter(Vector2(player.positionX, player.positionY));
 	view.setSize(Vector2f(width, height));
+    
     View view2;
+	view2.setCenter(Vector2f(width / 2, height / 2));
+	view2.setSize(Vector2f(width, height));
+   
 
 
-
+	// Game state
     bool screenMenu = true;
     bool game = false;
     bool settings = false;
@@ -72,7 +82,7 @@ int main()
     while (window.isOpen())
 
     {
-
+		//mouse position and button collision
         Vector2i mousePos = sf::Mouse::getPosition(window);
         if (buttonMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && screenMenu == true)
         {
@@ -119,34 +129,34 @@ int main()
 
         }
         // Clear screen
-
-        window.clear();
+        //
+        
         //draw
         if (screenMenu == true) {
+            window.setView(view2);
             window.draw(buttonMenu);
             window.draw(buttonSettings);
             window.draw(buttonQuit);
         }
         if (settings == true) {
-            view2.setCenter(Vector2f(width/2, height /2 ));
-            view2.setSize(Vector2f(width, height));
-            window.setView(view2);
+            
             window.draw(setttingsMenu);
             window.draw(buttonBack);
         }
         if (game == true) {
+            window.setView(view);
             player.move();
-            player.borderCollision((int)width, (int)height);
+            player.borderCollision((int)width, (int)height, bgWidth, bgHeight);
 			view.setCenter(Vector2(player.positionX, player.positionY));
 			window.draw(background);
-            window.setView(view);
             window.draw(player.playerShape);
         }
 
 
 
-
+      
         window.display();
+        window.clear();
 
 
 
