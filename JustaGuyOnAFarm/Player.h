@@ -13,7 +13,7 @@ public:
 	float playerSizeY;
 	int health;
 	void move();
-	void borderCollision(int x, int y, float sizeX, float sizeY);
+	void borderCollision( float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY);
 	void playerCreation(float posX, float posY);
 
 };

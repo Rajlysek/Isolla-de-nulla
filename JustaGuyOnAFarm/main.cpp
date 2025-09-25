@@ -4,11 +4,12 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
-
+#include "Animation.h"
+using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
 void buttonCreation(sf::RectangleShape& button, sf::Vector2f size, sf::Vector2f position);
-using namespace sf;
+enum class gameState { menu, settings, game };
 
 
 
@@ -56,15 +57,26 @@ int main()
 
     //player creations A
     Player player;
-	player.playerSizeX = 50.f;
-	player.playerSizeY = 50.f;
 	player.playerCreation(width / 2.f, height / 2.f);
+
+    //texture of the player
+    Texture playerTexture;
+    playerTexture.loadFromFile("idleAnimace.png");
+
+    player.playerShape.setTexture(&playerTexture);
+	player.playerShape.setScale({ 3.f, 3.f });
+    
+
+    Animation animation(&playerTexture, Vector2u(3, 3), 0.3f);
+    float deltaTime = 0.0f;
+    Clock clock;
+
 
 	
 
     //camera view
     View view;
-	view.setCenter(Vector2(player.positionX, player.positionY));
+	view.setCenter(Vector2(player.positionX - (player.playerShape.getSize().x/2), player.positionY -(player.playerShape.getSize().x / 2) ));
 	view.setSize(Vector2f(width, height));
     
     View view2;
@@ -74,43 +86,76 @@ int main()
 
 
 	// Game state
-    bool screenMenu = true;
-    bool game = false;
+    bool screenMenu = false;
+    bool game = true;
     bool settings = false;
 
+    gameState currentState = gameState::menu;
+
     // Start the game loop
+
     while (window.isOpen())
 
     {
+        deltaTime = clock.restart().asSeconds();
+        animation.Update(0, deltaTime);
+        player.playerShape.setTextureRect(animation.uvRect);
+
+
 		//mouse position and button collision
         Vector2i mousePos = sf::Mouse::getPosition(window);
-        if (buttonMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && screenMenu == true)
-        {
-            std::cout << "Click" << std::endl;
-            screenMenu = false;
-            game = true;
-        }
 
-        if (buttonSettings.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && screenMenu == true)
-        {
-            screenMenu = false;
-            settings = true;
-        }
-        if (buttonBack.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && settings == true)
-        {
-            screenMenu = true;
-            settings = false;
-        }
-        if (buttonQuit.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && screenMenu == true)
-        {
-            window.close();
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
-        {
-            game = false;
-            screenMenu = true;
-        }
+        
+        switch (currentState) {
+        //menu
+        case gameState::menu:
+            if (buttonMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
+            {
+                std::cout << "Click" << std::endl;
+                currentState = gameState::game;
+            }
 
+            if (buttonSettings.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
+            {
+                currentState = gameState::settings;
+            }
+           
+            if (buttonQuit.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
+            {
+                window.close();
+            }
+            window.setView(view2);
+            window.draw(buttonMenu);
+            window.draw(buttonSettings);
+            window.draw(buttonQuit);
+          
+            break;
+        //game
+        case gameState::game:
+            if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
+            {
+                currentState = gameState::menu;
+            }
+            window.setView(view);
+            player.move();
+            player.borderCollision(bgWidth, bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
+            view.setCenter(Vector2(player.positionX, player.positionY));
+            window.draw(background);
+            window.draw(player.playerShape);
+            break;
+         //setting       
+        case gameState::settings:
+            if (buttonBack.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::settings)
+            {
+                currentState = gameState::menu;
+                
+            }
+            window.draw(setttingsMenu);
+            window.draw(buttonBack);
+
+            break;
+        }
+  
 
 
         // Process events
@@ -132,26 +177,7 @@ int main()
         //
         
         //draw
-        if (screenMenu == true) {
-            window.setView(view2);
-            window.draw(buttonMenu);
-            window.draw(buttonSettings);
-            window.draw(buttonQuit);
-        }
-        if (settings == true) {
-            
-            window.draw(setttingsMenu);
-            window.draw(buttonBack);
-        }
-        if (game == true) {
-            window.setView(view);
-            player.move();
-            player.borderCollision((int)width, (int)height, bgWidth, bgHeight);
-			view.setCenter(Vector2(player.positionX, player.positionY));
-			window.draw(background);
-            window.draw(player.playerShape);
-        }
-
+       
 
 
       

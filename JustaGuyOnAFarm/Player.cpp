@@ -140,24 +140,25 @@ void Player::move()
 	
 
 }
-void Player::borderCollision(int x, int y, float sizeX, float sizeY)
+void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY)
 {
+	
 	if (positionX <= 0)
 	{
 		positionX = 0;
 	}
-	if (positionX >= sizeX - 50)
+	if (positionX >= windowSizeX - playerSizeX)
 	{
 
-		positionX = sizeX - 50;
+		positionX = windowSizeX - playerSizeX;
 	}
 	if (positionY <= 0)
 	{
 		positionY = 0;
 	}
-	if (positionY >= sizeY - 50)
+	if (positionY >= WindowsizeY - playerSizeY)
 	{
-		positionY =sizeY- 50;
+		positionY = WindowsizeY - playerSizeY;
 	}
 }
 
@@ -165,7 +166,7 @@ void Player::playerCreation(float posX, float posY)
 {
 	positionX = posX / 2;
 	positionY = posY / 2;
-	playerShape.setSize({ 50.f, 50.f });
+	playerShape.setSize({ 32.f, 32.f });
 	playerShape.setPosition({ positionX, positionY });
 	health = 100;
 }

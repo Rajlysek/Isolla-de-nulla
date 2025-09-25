@@ -12,3 +12,5 @@ void view::update(float x, float y)
 	player.positionY = y;
 	viewShape.setCenter({ positionX, positionY });
 }	
+
+
