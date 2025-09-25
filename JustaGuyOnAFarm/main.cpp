@@ -130,19 +130,7 @@ int main()
             window.draw(buttonQuit);
           
             break;
-        //game
-        case gameState::game:
-            if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
-            {
-                currentState = gameState::menu;
-            }
-            window.setView(view);
-            player.move();
-            player.borderCollision(bgWidth, bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-            view.setCenter(Vector2(player.positionX, player.positionY));
-            window.draw(background);
-            window.draw(player.playerShape);
-            break;
+       
          //setting       
         case gameState::settings:
             if (buttonBack.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::settings)
@@ -153,6 +141,20 @@ int main()
             window.draw(setttingsMenu);
             window.draw(buttonBack);
 
+            break;
+            //game
+        case gameState::game:
+            if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
+            {
+                currentState = gameState::menu;
+            }
+            window.setView(view);
+            player.move();
+            player.borderCollision(bgWidth, bgHeight, player.playerShape.getSize().x , player.playerShape.getSize().y);
+            view.setCenter(Vector2(player.positionX, player.positionY));
+            window.draw(background);
+            window.draw(player.playerShape);
+			std::cout << player.positionX << " " << player.positionY << std::endl;
             break;
         }
   

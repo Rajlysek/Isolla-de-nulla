@@ -147,18 +147,18 @@ void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerS
 	{
 		positionX = 0;
 	}
-	if (positionX >= windowSizeX - playerSizeX)
+	if (positionX > windowSizeX - playerSizeX*3)
 	{
 
-		positionX = windowSizeX - playerSizeX;
+		positionX = windowSizeX - playerSizeX*3; //500 - 32
 	}
 	if (positionY <= 0)
 	{
 		positionY = 0;
 	}
-	if (positionY >= WindowsizeY - playerSizeY)
+	if (positionY >= WindowsizeY - playerSizeY*3)
 	{
-		positionY = WindowsizeY - playerSizeY;
+		positionY = WindowsizeY - playerSizeY*3;
 	}
 }
 
