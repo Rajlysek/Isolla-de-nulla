@@ -36,3 +36,14 @@ bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos)
 }
 
 
+//void loadVillage() {
+//	sf::Texture bg("mapa.png");
+//	sf::Sprite background(bg);
+//	background.setTexture(bg);
+//	background.setPosition(sf::Vector2f(0, 0));
+//	float bgWidth = bg.getSize().x;
+//	float bgHeight = bg.getSize().y;
+//
+//}
+
+

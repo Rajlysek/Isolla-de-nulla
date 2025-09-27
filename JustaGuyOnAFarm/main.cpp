@@ -5,11 +5,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "Animation.h"
+#include "map.h"
 using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
 void buttonCreation(sf::RectangleShape& button, sf::Vector2f size, sf::Vector2f position);
+
 enum class gameState { menu, settings, game };
+//enum class State { Default = State::Default, Fullscreen = State::Fullscreen, Close = State::Close, None = Style::None };
+enum class MapState { village, farm, house};
 
 
 
@@ -47,14 +51,27 @@ int main()
 
 	
 
-	//background creations
-    Texture bg("mapa.png");
-    Sprite background(bg);
-    background.setTexture(bg);
-    background.setPosition(Vector2f(0, 0));
-	float bgWidth = bg.getSize().x;
-	float bgHeight = bg.getSize().y;
 
+    village.texture.loadFromFile("mapa.png");
+    
+    village.bgWidth = village.texture.getSize().x;
+    village.bgHeight = village.texture.getSize().y;
+
+	farm.texture.loadFromFile("nothing.png");
+    farm.bgWidth = farm.texture.getSize().x;
+	farm.bgHeight = farm.texture.getSize().y;
+
+
+	//background creations
+    //Texture bg("mapa.png");
+    Sprite villageMap(village.texture);
+    villageMap.setTexture(village.texture);
+    villageMap.setPosition(Vector2f(0, 0));
+
+	Sprite farmMap(farm.texture);
+	farmMap.setTexture(farm.texture);
+	farmMap.setPosition(Vector2f(0, 0));
+	
     //player creations A
     Player player;
 	player.playerCreation(width / 2.f, height / 2.f);
@@ -78,19 +95,21 @@ int main()
     View view;
 	view.setCenter(Vector2(player.positionX - (player.playerShape.getSize().x/2), player.positionY -(player.playerShape.getSize().x / 2) ));
 	view.setSize(Vector2f(width, height));
+    //až se hraè dostane za urcitou x a y pozici kamera zustane stát?
     
     View view2;
 	view2.setCenter(Vector2f(width / 2, height / 2));
 	view2.setSize(Vector2f(width, height));
    
 
-
+    
 	// Game state
     bool screenMenu = false;
     bool game = true;
     bool settings = false;
 
     gameState currentState = gameState::menu;
+	MapState currentMap = MapState::village;
 
     // Start the game loop
 
@@ -144,17 +163,43 @@ int main()
             break;
             //game
         case gameState::game:
-            if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
-            {
-                currentState = gameState::menu;
+            switch (currentMap) {
+			case MapState::village:
+                
+                if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
+                {
+                    currentState = gameState::menu;
+                }
+
+                if (player.positionX >= 2700  && player.positionY >= 0 && player.positionY <= 100) {
+                    
+                    player.positionChange(0.f, player.positionY);
+                    currentMap = MapState::farm;
+
+					
+                }
+                window.setView(view);
+                player.move();
+                player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
+                view.setCenter(Vector2(player.positionX, player.positionY));
+                window.draw(villageMap);
+                window.draw(player.playerShape);
+                std::cout << player.positionX << " " << player.positionY << std::endl;
+                break;
+            
+            case MapState::farm:
+                if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
+                {
+                    currentState = gameState::menu;
+                }
+                window.setView(view);
+                player.move();
+                player.borderCollision(farm.bgWidth, farm.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
+                view.setCenter(Vector2(player.positionX, player.positionY));
+                window.draw(farmMap);
+                window.draw(player.playerShape);
+				std::cout << player.positionX << " " << player.positionY << std::endl;
             }
-            window.setView(view);
-            player.move();
-            player.borderCollision(bgWidth, bgHeight, player.playerShape.getSize().x , player.playerShape.getSize().y);
-            view.setCenter(Vector2(player.positionX, player.positionY));
-            window.draw(background);
-            window.draw(player.playerShape);
-			std::cout << player.positionX << " " << player.positionY << std::endl;
             break;
         }
   

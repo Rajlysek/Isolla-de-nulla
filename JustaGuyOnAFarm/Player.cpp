@@ -170,3 +170,8 @@ void Player::playerCreation(float posX, float posY)
 	playerShape.setPosition({ positionX, positionY });
 	health = 100;
 }
+void Player::positionChange(float x, float y) {
+	positionX = x;
+	positionY = y;
+	playerShape.setPosition({ x,y });
+}
