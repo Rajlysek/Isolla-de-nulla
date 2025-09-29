@@ -45,9 +45,9 @@ void Player::move()
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 6.f;
+			float x = 4.f;
 			positionX += x;
-			float y = 7.f;
+			float y = 4.f;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 
