@@ -6,7 +6,6 @@
 
 struct Map {
 	sf::Texture texture;
-
 	float bgWidth;
 	float bgHeight;
 };

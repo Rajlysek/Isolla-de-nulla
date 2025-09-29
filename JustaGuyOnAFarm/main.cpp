@@ -48,12 +48,19 @@ int main()
     buttonCreation(setttingsMenu, { 600.f, 400.f }, { 100.f,100.f });
     buttonTryAgain.setFillColor(Color::Red);
     setttingsMenu.setFillColor(Color::Blue);
+    
+
+
+
+    Texture zkouskaTexture("blok.png");
+	Sprite zkouskaSprite(zkouskaTexture);
+	zkouskaSprite.setPosition(Vector2f(0, 0));
+	zkouskaSprite.setScale({ 2.f, 2.f });
 
 	
 
 
     village.texture.loadFromFile("mapa.png");
-    
     village.bgWidth = village.texture.getSize().x;
     village.bgHeight = village.texture.getSize().y;
 
@@ -171,7 +178,7 @@ int main()
                     currentState = gameState::menu;
                 }
 
-                if (player.positionX >= 2700  && player.positionY >= 0 && player.positionY <= 100) {
+                if (player.positionX >= 2900  && player.positionY >= 0 && player.positionY <= 100) {
                     
                     player.positionChange(0.f, player.positionY);
                     currentMap = MapState::farm;
@@ -183,6 +190,7 @@ int main()
                 player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
                 view.setCenter(Vector2(player.positionX, player.positionY));
                 window.draw(villageMap);
+				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;

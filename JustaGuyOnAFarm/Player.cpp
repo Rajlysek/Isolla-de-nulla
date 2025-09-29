@@ -17,9 +17,9 @@ void Player::move()
 
 		}
 		else {
-			float x = 3.f;
+			float x = 0.75;
 			positionX += x;
-			float y = -3.f;
+			float y = -0.65;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
@@ -35,9 +35,9 @@ void Player::move()
 
 		}
 		else {
-			float x = -3.f;
+			float x = -0.75;
 			positionX += x;
-			float y = -3.f;
+			float y = -0.65;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
@@ -45,17 +45,17 @@ void Player::move()
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 4.f;
+			float x = 6.f;
 			positionX += x;
-			float y = 4.f;
+			float y = 7.f;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 
 		}
 		else {
-			float x = 3.f;
+			float x = 0.75;
 			positionX += x;
-			float y = 3.f;
+			float y = 0.65;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
@@ -70,9 +70,9 @@ void Player::move()
 
 		}
 		else {
-			float x = -3.f;
+			float x = -0.75;
 			positionX += x;
-			float y = 3.f;
+			float y = 0.65;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
