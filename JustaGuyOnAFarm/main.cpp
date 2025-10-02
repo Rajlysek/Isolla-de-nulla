@@ -6,10 +6,16 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "Animation.h"
 #include "map.h"
+#include <string>
+#include <tuple>
+#include "camera.h"
 using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
 void buttonCreation(sf::RectangleShape& button, sf::Vector2f size, sf::Vector2f position);
+void borderCollisionView(float playerPosX, float playerPosY, unsigned int windowSizeX, unsigned int windowSizeY, float backgroundSizeX, float backgroundSizeY);
+void update(float playerPosX, float playerPosY, sf::View& view);
+
 
 enum class gameState { menu, settings, game };
 //enum class State { Default = State::Default, Fullscreen = State::Fullscreen, Close = State::Close, None = Style::None };
@@ -19,7 +25,8 @@ enum class MapState { village, farm, house};
 
 
 int main()
-{
+{   
+	camera cam;
 	// Create the main window and get desktop resolution
 	auto desktop = VideoMode::getDesktopMode();
     unsigned int width = desktop.size.x;
@@ -78,20 +85,22 @@ int main()
 	Sprite farmMap(farm.texture);
 	farmMap.setTexture(farm.texture);
 	farmMap.setPosition(Vector2f(0, 0));
-	
+
     //player creations A
     Player player;
-	player.playerCreation(width / 2.f, height / 2.f);
+	float playerCreationPosX = village.texture.getSize().x / 2;
+    float playerCreationPosY = village.texture.getSize().y / 2;
+	player.playerCreation(playerCreationPosX, playerCreationPosY);
 
     //texture of the player
     Texture playerTexture;
-    playerTexture.loadFromFile("idleAnimace.png");
+    playerTexture.loadFromFile("IdleAnimace.png");
 
     player.playerShape.setTexture(&playerTexture);
-	player.playerShape.setScale({ 3.f, 3.f });
+	player.playerShape.setScale({ 4.5, 4.5 });
     
 
-    Animation animation(&playerTexture, Vector2u(3, 3), 0.3f);
+    Animation idleAnimation(&playerTexture, Vector2u(5, 1), 0.15f);
     float deltaTime = 0.0f;
     Clock clock;
 
@@ -100,7 +109,6 @@ int main()
 
     //camera view
     View view;
-	view.setCenter(Vector2(player.positionX - (player.playerShape.getSize().x/2), player.positionY -(player.playerShape.getSize().x / 2) ));
 	view.setSize(Vector2f(width, height));
     //až se hraè dostane za urcitou x a y pozici kamera zustane stát?
     
@@ -123,9 +131,10 @@ int main()
     while (window.isOpen())
 
     {
-        deltaTime = clock.restart().asSeconds();
-        animation.Update(0, deltaTime);
-        player.playerShape.setTextureRect(animation.uvRect);
+	
+       deltaTime = clock.restart().asSeconds();
+       idleAnimation.Update(0, deltaTime);
+       player.playerShape.setTextureRect(idleAnimation.uvRect);
 
 
 		//mouse position and button collision
@@ -168,6 +177,9 @@ int main()
             window.draw(buttonBack);
 
             break;
+
+
+
             //game
         case gameState::game:
             switch (currentMap) {
@@ -182,13 +194,16 @@ int main()
                     
                     player.positionChange(0.f, player.positionY);
                     currentMap = MapState::farm;
-
+                
 					
                 }
+                //std::tuple<int posX,int  posY> = borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight);
+                
                 window.setView(view);
                 player.move();
                 player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                view.setCenter(Vector2(player.positionX, player.positionY));
+                //cam.update(player.positionX, player.positionY, view);
+                cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
@@ -203,7 +218,7 @@ int main()
                 window.setView(view);
                 player.move();
                 player.borderCollision(farm.bgWidth, farm.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                view.setCenter(Vector2(player.positionX, player.positionY));
+                cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(farmMap);
                 window.draw(player.playerShape);
 				std::cout << player.positionX << " " << player.positionY << std::endl;

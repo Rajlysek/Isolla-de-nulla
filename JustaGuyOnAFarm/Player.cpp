@@ -1,25 +1,27 @@
 #include "Player.h"
 #include "Player.h"
 #include <iostream>
+#include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+
 
 void Player::move()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 4.f;
+			float x = 1.4;
 			positionX += x;
-			float y = -4.f;
+			float y = -1.4;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 
 		}
 		else {
-			float x = 0.75;
+			float x = 0.7;
 			positionX += x;
-			float y = -0.65;
+			float y = -0.7;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
@@ -27,17 +29,17 @@ void Player::move()
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = -4.f;
+			float x = -1.4;
 			positionX += x;
-			float y = -4.f;
+			float y = -1.4;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 
 		}
 		else {
-			float x = -0.75;
+			float x = -0.7;
 			positionX += x;
-			float y = -0.65;
+			float y = -0.7;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
@@ -45,26 +47,26 @@ void Player::move()
 
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 4.f;
+			float x = 1.4;
 			positionX += x;
-			float y = 4.f;
+			float y = 1.4;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 
 		}
 		else {
-			float x = 0.75;
+			float x = 0.7;
 			positionX += x;
-			float y = 0.65;
+			float y = 0.7;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = -4.f;
+			float x = -1.4;
 			positionX += x;
-			float y = 4.f;
+			float y = 1.4;
 			positionY += y;
 			playerShape.setPosition({ positionX, positionY });
 
@@ -116,6 +118,7 @@ void Player::move()
 			float x = -10.f;
 			positionX += x;
 			playerShape.setPosition({ positionX, positionY });
+			
 
 		}
 		else {
@@ -164,8 +167,8 @@ void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerS
 
 void Player::playerCreation(float posX, float posY)
 {
-	positionX = posX / 2;
-	positionY = posY / 2;
+	positionX = posX;
+	positionY = posY;
 	playerShape.setSize({ 32.f, 32.f });
 	playerShape.setPosition({ positionX, positionY });
 	health = 100;
@@ -175,3 +178,13 @@ void Player::positionChange(float x, float y) {
 	positionY = y;
 	playerShape.setPosition({ x,y });
 }
+
+
+//void Player::borderCollisionView()
+//{
+//	auto desktop;
+//	unsigned int width = desktop.size.x;
+//	unsigned int height = desktop.size.y;
+//	if 
+//
+//}

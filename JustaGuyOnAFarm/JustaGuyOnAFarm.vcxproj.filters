@@ -27,7 +27,7 @@
     <ClCompile Include="materials.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
-    <ClCompile Include="view.cpp">
+    <ClCompile Include="camera.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
@@ -44,7 +44,7 @@
     <ClInclude Include="materials.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
-    <ClInclude Include="view.h">
+    <ClInclude Include="camera.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
