@@ -188,3 +188,17 @@ void Player::positionChange(float x, float y) {
 //	if 
 //
 //}
+void directionOfPlayer() {
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	{
+		int direction = 2;
+	}
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	{
+		int directon = 1;
+	}
+	else
+	{
+		int direction = 0;
+	}
+}
