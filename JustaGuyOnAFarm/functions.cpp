@@ -58,20 +58,7 @@ bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos)
 
 }
 
-//if (player.positionX <= width / 2) {
-//	float posX = width / 2;
-//	view.setCenter(Vector2(posX, player.positionY));
-//}
-//else {
-//	view.setCenter(Vector2(player.positionX, player.positionY));
-//}
-//if (player.positionY <= height / 2) {
-//	float posY = height / 2;
-//	view.setCenter(Vector2(player.positionX, posY));
-//}
-//else {
-//	view.setCenter(Vector2(player.positionX, player.positionY));
-//}
+
 
 //void loadVillage() {
 //	sf::Texture bg("mapa.png");

@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-
+//long function that handles player movement and running with shift key and usage of pythagorean theorem for diagonal movement
 void Player::move()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
@@ -143,6 +143,7 @@ void Player::move()
 	
 
 }
+//player collison with the border
 void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY)
 {
 	
@@ -164,7 +165,7 @@ void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerS
 		positionY = WindowsizeY - playerSizeY*3;
 	}
 }
-
+//vytvoreni hrace
 void Player::playerCreation(float posX, float posY)
 {
 	positionX = posX;
@@ -179,26 +180,23 @@ void Player::positionChange(float x, float y) {
 	playerShape.setPosition({ x,y });
 }
 
-
-//void Player::borderCollisionView()
-//{
-//	auto desktop;
-//	unsigned int width = desktop.size.x;
-//	unsigned int height = desktop.size.y;
-//	if 
-//
-//}
-void directionOfPlayer() {
+int Player::directionOfPlayer() {
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
-		int direction = 2;
+		return 2;
 	}
 	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
 	{
-		int directon = 1;
+		return 1;
 	}
 	else
 	{
-		int direction = 0;
+		return 0;
 	}
+}
+//player texture change when moving left or right
+void Player::changeDirectionTexture(sf::Texture& playerTexture, const std::filesystem::path& animationPicture)
+{
+		playerTexture.loadFromFile(animationPicture);
+
 }

@@ -135,7 +135,8 @@ int main()
        deltaTime = clock.restart().asSeconds();
        idleAnimation.Update(0, deltaTime);
        player.playerShape.setTextureRect(idleAnimation.uvRect);
-
+       
+	   
 
 		//mouse position and button collision
         Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -197,7 +198,18 @@ int main()
                 
 					
                 }
-                //std::tuple<int posX,int  posY> = borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight);
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)){
+                
+                    player.changeDirectionTexture(playerTexture, "WalkindIdleLeft.png");
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+
+                    player.changeDirectionTexture(playerTexture, "WalkingIdleRight.png");
+                }
+                else {
+                    player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
+				}
+
                 
                 window.setView(view);
                 player.move();
@@ -214,6 +226,18 @@ int main()
                 if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
                 {
                     currentState = gameState::menu;
+                }
+                
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+
+                    player.changeDirectionTexture(playerTexture, "WalkindIdleLeft.png");
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+
+                    player.changeDirectionTexture(playerTexture, "WalkingIdleRight.png");
+                }
+                else {
+                    player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
                 }
                 window.setView(view);
                 player.move();
