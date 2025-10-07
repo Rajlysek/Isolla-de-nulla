@@ -11,3 +11,4 @@ struct Map {
 };
 extern Map village;
 extern Map farm;
+enum class MapState { village, farm, house };

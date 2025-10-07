@@ -5,7 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
-
+#include "map.h"
 //long function that handles player movement and running with shift key and usage of pythagorean theorem for diagonal movement
 void Player::move()
 {
@@ -151,18 +151,18 @@ void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerS
 	{
 		positionX = 0;
 	}
-	if (positionX > windowSizeX - playerSizeX*3)
+	if (positionX > windowSizeX - playerSizeX*4.5)
 	{
 
-		positionX = windowSizeX - playerSizeX*3; //500 - 32
+		positionX = windowSizeX - playerSizeX*4.5; //500 - 32
 	}
 	if (positionY <= 0)
 	{
 		positionY = 0;
 	}
-	if (positionY >= WindowsizeY - playerSizeY*3)
+	if (positionY >= WindowsizeY - playerSizeY*4.5)
 	{
-		positionY = WindowsizeY - playerSizeY*3;
+		positionY = WindowsizeY - playerSizeY *4.5;
 	}
 }
 //vytvoreni hrace
@@ -180,23 +180,52 @@ void Player::positionChange(float x, float y) {
 	playerShape.setPosition({ x,y });
 }
 
-int Player::directionOfPlayer() {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-	{
-		return 2;
-	}
-	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+//int Player::directionOfPlayer() {
+//	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+//	{
+//		return 2;
+//	}
+//	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+//	{
+//		return 1;
+//	}
+//	else
+//	{
+//		return 0;
+//	}
+//}
 //player texture change when moving left or right
 void Player::changeDirectionTexture(sf::Texture& playerTexture, const std::filesystem::path& animationPicture)
 {
 		playerTexture.loadFromFile(animationPicture);
 
+}
+bool Player::reachingPlaceForMapChange(float lowerTransitionPointX, float higherTransitionPointX, float lowerTransitionPointY, float higherTransitionPointY, float mapSizeX, float mapSizeY)
+{
+	if(positionX >= lowerTransitionPointX && positionX <= higherTransitionPointX)
+	{
+		
+		if (positionX <= mapSizeX / 2) {
+			positionX = mapSizeX - playerSizeX * 4.5 - 10;
+			return true;
+		}
+		else {
+			positionX = 10;
+			return true;
+		}
+	}
+	else if (positionY >= lowerTransitionPointY && positionY <= higherTransitionPointY)
+	{
+		if (positionY <= mapSizeY / 2) {
+			positionY = mapSizeY - playerSizeY * 4.5 - 10;
+			return true;
+		}
+		else {
+			positionY = 10;
+			return true;
+		}
+	}
+	else {
+		return false;
+	}
 }

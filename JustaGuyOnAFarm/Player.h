@@ -19,6 +19,7 @@ public:
 	void positionChange(float x, float y);
 	int directionOfPlayer();
 	void changeDirectionTexture(sf::Texture& playerTexture, const std::filesystem::path& animationPicture);
+	bool reachingPlaceForMapChange(float lowerTransitionPointX, float higherTransitionPointX, float lowerTransitionPointY, float higherTransitionPointY, float mapSizeX, float mapSizeY);
 };
 
 

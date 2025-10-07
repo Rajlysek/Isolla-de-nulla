@@ -19,7 +19,7 @@ void update(float playerPosX, float playerPosY, sf::View& view);
 
 enum class gameState { menu, settings, game };
 //enum class State { Default = State::Default, Fullscreen = State::Fullscreen, Close = State::Close, None = Style::None };
-enum class MapState { village, farm, house};
+
 
 
 
@@ -95,6 +95,8 @@ int main()
     //texture of the player
     Texture playerTexture;
     playerTexture.loadFromFile("IdleAnimace.png");
+    int idleSizeX = playerTexture.getSize().x;
+	int idleSizeY = playerTexture.getSize().y;
 
     player.playerShape.setTexture(&playerTexture);
 	player.playerShape.setScale({ 4.5, 4.5 });
@@ -131,7 +133,7 @@ int main()
     while (window.isOpen())
 
     {
-	
+	   std::cout << playerTexture.getSize().x << " " << playerTexture.getSize().y << std::endl;
        deltaTime = clock.restart().asSeconds();
        idleAnimation.Update(0, deltaTime);
        player.playerShape.setTextureRect(idleAnimation.uvRect);
@@ -214,7 +216,10 @@ int main()
                 window.setView(view);
                 player.move();
                 player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                //cam.update(player.positionX, player.positionY, view);
+                if (player.reachingPlaceForMapChange(village.bgWidth, village.bgWidth, 0, 0, village.bgWidth, village.bgHeight)) 
+                {
+                   currentMap = MapState::farm;
+                }
                 cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
@@ -242,6 +247,10 @@ int main()
                 window.setView(view);
                 player.move();
                 player.borderCollision(farm.bgWidth, farm.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
+                if (player.reachingPlaceForMapChange(farm.bgWidth - idleSizeX, farm.bgWidth - idleSizeX, farm.bgHeight - idleSizeY-10, farm.bgHeight- idleSizeY -10, farm.bgWidth, farm.bgHeight))
+                {
+                    currentMap = MapState::village;
+                }
                 cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(farmMap);
                 window.draw(player.playerShape);
