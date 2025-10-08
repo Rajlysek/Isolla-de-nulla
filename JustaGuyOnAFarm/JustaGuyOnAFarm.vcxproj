@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="materials.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="hitbox.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="materials.h" />
     <ClInclude Include="Player.h" />

@@ -195,7 +195,7 @@ int main()
 
                 if (player.positionX >= 2900  && player.positionY >= 0 && player.positionY <= 100) {
                     
-                    player.positionChange(0.f, player.positionY);
+                    player.positionChange(100.f, player.positionY);
                     currentMap = MapState::farm;
                 
 					
@@ -244,10 +244,18 @@ int main()
                 else {
                     player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
                 }
+
+                if (player.positionX >= 20 && player.positionY >= 0 && player.positionY <= 100) {
+                
+                    player.positionChange(2870.f, player.positionY);
+                    currentMap = MapState::village;
+                
+                
+                }
                 window.setView(view);
                 player.move();
                 player.borderCollision(farm.bgWidth, farm.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                if (player.reachingPlaceForMapChange(farm.bgWidth - idleSizeX, farm.bgWidth - idleSizeX, farm.bgHeight - idleSizeY-10, farm.bgHeight- idleSizeY -10, farm.bgWidth, farm.bgHeight))
+                if (player.reachingPlaceForMapChange(0, farm.bgWidth, farm.bgHeight - idleSizeY, farm.bgHeight- idleSizeY, farm.bgWidth, farm.bgHeight))
                 {
                     currentMap = MapState::village;
                 }
@@ -255,6 +263,7 @@ int main()
                 window.draw(farmMap);
                 window.draw(player.playerShape);
 				std::cout << player.positionX << " " << player.positionY << std::endl;
+				break;
             }
             break;
         }
