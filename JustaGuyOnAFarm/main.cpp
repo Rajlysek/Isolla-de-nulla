@@ -95,11 +95,13 @@ int main()
     //texture of the player
     Texture playerTexture;
     playerTexture.loadFromFile("IdleAnimace.png");
-    int idleSizeX = playerTexture.getSize().x;
-	int idleSizeY = playerTexture.getSize().y;
+   
 
     player.playerShape.setTexture(&playerTexture);
 	player.playerShape.setScale({ 4.5, 4.5 });
+    player.playerShape.setTextureRect(sf::IntRect({ 12, 2 }, { 26, 48 }));
+    int idleSizeX = player.playerShape.getSize().x;
+    int idleSizeY = player.playerShape.getSize().y;
     
 
     Animation idleAnimation(&playerTexture, Vector2u(5, 1), 0.15f);
@@ -133,7 +135,7 @@ int main()
     while (window.isOpen())
 
     {
-	   std::cout << playerTexture.getSize().x << " " << playerTexture.getSize().y << std::endl;
+       
        deltaTime = clock.restart().asSeconds();
        idleAnimation.Update(0, deltaTime);
        player.playerShape.setTextureRect(idleAnimation.uvRect);
@@ -193,13 +195,13 @@ int main()
                     currentState = gameState::menu;
                 }
 
-                if (player.positionX >= 2900  && player.positionY >= 0 && player.positionY <= 100) {
-                    
-                    player.positionChange(100.f, player.positionY);
-                    currentMap = MapState::farm;
-                
-					
-                }
+                //if (player.positionX >= 2900  && player.positionY >= 0 && player.positionY <= 100) {
+                //    
+                //    player.positionChange(100.f, player.positionY);
+                //    currentMap = MapState::farm;
+                //
+				//	
+                //}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)){
                 
                     player.changeDirectionTexture(playerTexture, "WalkindIdleLeft.png");
@@ -216,7 +218,7 @@ int main()
                 window.setView(view);
                 player.move();
                 player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                if (player.reachingPlaceForMapChange(village.bgWidth, village.bgWidth, 0, 0, village.bgWidth, village.bgHeight)) 
+                if (player.reachingVerticalPlaceForMapChange(0, 700, 1000, village.bgWidth, village.bgHeight))
                 {
                    currentMap = MapState::farm;
                 }
@@ -224,6 +226,7 @@ int main()
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
+                std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
             
@@ -245,23 +248,25 @@ int main()
                     player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
                 }
 
-                if (player.positionX >= 20 && player.positionY >= 0 && player.positionY <= 100) {
-                
-                    player.positionChange(2870.f, player.positionY);
-                    currentMap = MapState::village;
-                
-                
-                }
+                //if (player.positionX >= 20 && player.positionY >= 0 && player.positionY <= 100) {
+                //
+                //    player.positionChange(2870.f, player.positionY);
+                //    currentMap = MapState::village;
+                //
+                //
+                //}
                 window.setView(view);
                 player.move();
                 player.borderCollision(farm.bgWidth, farm.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                if (player.reachingPlaceForMapChange(0, farm.bgWidth, farm.bgHeight - idleSizeY, farm.bgHeight- idleSizeY, farm.bgWidth, farm.bgHeight))
+                if (player.reachingVerticalPlaceForMapChange(farm.bgWidth-idleSizeX*4.5, 700 , 1000, farm.bgWidth, farm.bgHeight))
                 {
                     currentMap = MapState::village;
                 }
                 cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(farmMap);
                 window.draw(player.playerShape);
+                std::cout << idleSizeX << std::endl;
+                std::cout <<farm.bgWidth << std::endl;
 				std::cout << player.positionX << " " << player.positionY << std::endl;
 				break;
             }

@@ -9,139 +9,25 @@
 //long function that handles player movement and running with shift key and usage of pythagorean theorem for diagonal movement
 void Player::move()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 1.4;
-			positionX += x;
-			float y = -1.4;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
+	float speed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) ? 10.f : 6.f;
+	float diagonalSpeed = speed * 1.f;
 
-		}
-		else {
-			float x = 0.7;
-			positionX += x;
-			float y = -0.7;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
+	float dx = 0.f;
+	float dy = 0.f;	
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) dy -= speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) dy += speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) dx -= speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) dx += speed;
+
+	if (dx != 0.f && dy != 0.f) {
+		float length = std::sqrt(dx * dx + dy * dy);
+		dx = (dx / length) * diagonalSpeed;
+		dy = (dy / length) * diagonalSpeed;
 	}
-
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = -1.4;
-			positionX += x;
-			float y = -1.4;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-
-		}
-		else {
-			float x = -0.7;
-			positionX += x;
-			float y = -0.7;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 1.4;
-			positionX += x;
-			float y = 1.4;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-
-		}
-		else {
-			float x = 0.7;
-			positionX += x;
-			float y = 0.7;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = -1.4;
-			positionX += x;
-			float y = 1.4;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-
-		}
-		else {
-			float x = -0.75;
-			positionX += x;
-			float y = 0.65;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-
-
-
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float y = -10.f;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-
-		}
-		else
-		{
-			float y = -6.f;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-
-			float y = 10.f;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
-		else {
-			float y = 6.f;
-			positionY += y;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
-		{
-			float x = -10.f;
-			positionX += x;
-			playerShape.setPosition({ positionX, positionY });
-			
-
-		}
-		else {
-			float x = -6.f;
-			positionX += x;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift)) {
-			float x = 10.f;
-			positionX += x;
-			playerShape.setPosition({ positionX, positionY });
-		}
-		else
-		{
-			float x = 6.f;
-			positionX += x;
-			playerShape.setPosition({ positionX, positionY });
-		}
-	}
-	
-
+	positionX += dx;
+	positionY += dy;
+	playerShape.setPosition({ positionX, positionY });
 }
 //player collison with the border
 void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY)
@@ -200,32 +86,65 @@ void Player::changeDirectionTexture(sf::Texture& playerTexture, const std::files
 		playerTexture.loadFromFile(animationPicture);
 
 }
-bool Player::reachingPlaceForMapChange(float lowerTransitionPointX, float higherTransitionPointX, float lowerTransitionPointY, float higherTransitionPointY, float mapSizeX, float mapSizeY)
+bool Player::reachingVerticalPlaceForMapChange(float TransitionPointX, float lowerTransitionPointY, float higherTransitionPointY, float mapSizeX, float mapSizeY)
 {
-	if(positionX >= lowerTransitionPointX && positionX <= higherTransitionPointX)
-	{
+	int side = 0;
+	if (TransitionPointX == 0) {
+		side = 0;
+	}
+	else
+		side = 1;
+	
+	switch (side) {
+		case 0:
+			if (!(positionX <= TransitionPointX)) return false;
+			else {
+				if (positionY > lowerTransitionPointY && positionY < higherTransitionPointY)
+				{
+					positionX = mapSizeX - 145; return true;
+					 
+				}
+			}
+			return false;
+			break;
+		case 1:
+			if (!(positionX >= TransitionPointX)) return false;
+			else {
+				if (positionY > lowerTransitionPointY && positionY < higherTransitionPointY)
+				{
+					positionX = 10; return true;
+				}
+				return false;
+			}
+			break;
+	}
 		
-		if (positionX <= mapSizeX / 2) {
-			positionX = mapSizeX - playerSizeX * 4.5 - 10;
-			return true;
-		}
-		else {
-			positionX = 10;
-			return true;
-		}
-	}
-	else if (positionY >= lowerTransitionPointY && positionY <= higherTransitionPointY)
-	{
-		if (positionY <= mapSizeY / 2) {
-			positionY = mapSizeY - playerSizeY * 4.5 - 10;
-			return true;
-		}
-		else {
-			positionY = 10;
-			return true;
-		}
-	}
-	else {
-		return false;
-	}
+
+
+	//if(positionX >= lowerTransitionPointX && positionX <= higherTransitionPointX)
+	//{
+	//	
+	//	if (positionX <= mapSizeX / 2) {
+	//		positionX = mapSizeX - playerSizeX * 4.5 - 10;
+	//		return true;
+	//	}
+	//	else {
+	//		positionX = 10;
+	//		return true;
+	//	}
+	//}
+	//else if (positionY >= lowerTransitionPointY && positionY <= higherTransitionPointY)
+	//{
+	//	if (positionY <= mapSizeY / 2) {
+	//		positionY = mapSizeY - playerSizeY * 4.5 - 10;
+	//		return true;
+	//	}
+	//	else {
+	//		positionY = 10;
+	//		return true;
+	//	}
+	//}
+	//else {
+	//	return false;
+	//}
 }
