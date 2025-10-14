@@ -222,6 +222,10 @@ int main()
                 {
                    currentMap = MapState::farm;
                 }
+                if (player.reachingHorizontalPlaceForMapChange(0, 700, 1000, farm.bgWidth, farm.bgHeight))
+                {
+                    currentMap = MapState::farm;
+                }
                 cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
@@ -262,6 +266,11 @@ int main()
                 {
                     currentMap = MapState::village;
                 }
+                if (player.reachingHorizontalPlaceForMapChange(farm.bgHeight - idleSizeY * 4.5, 700, 1000, farm.bgWidth, farm.bgHeight))
+                {
+                    currentMap = MapState::village;
+                }
+            
                 cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(farmMap);
                 window.draw(player.playerShape);
@@ -276,7 +285,7 @@ int main()
 
 
         // Process events
-
+         
         while (const std::optional event = window.pollEvent())
 
         {

@@ -94,57 +94,65 @@ bool Player::reachingVerticalPlaceForMapChange(float TransitionPointX, float low
 	}
 	else
 		side = 1;
-	
+
 	switch (side) {
-		case 0:
-			if (!(positionX <= TransitionPointX)) return false;
-			else {
-				if (positionY > lowerTransitionPointY && positionY < higherTransitionPointY)
-				{
-					positionX = mapSizeX - 145; return true;
-					 
-				}
+	case 0:
+		if (!(positionX <= TransitionPointX)) return false;
+		else {
+			if (positionY > lowerTransitionPointY && positionY < higherTransitionPointY)
+			{
+				positionX = mapSizeX - 145; return true;
+
+			}
+		}
+		return false;
+		break;
+	case 1:
+		if (!(positionX >= TransitionPointX)) return false;
+		else {
+			if (positionY > lowerTransitionPointY && positionY < higherTransitionPointY)
+			{
+				positionX = 10; return true;
 			}
 			return false;
-			break;
-		case 1:
-			if (!(positionX >= TransitionPointX)) return false;
-			else {
-				if (positionY > lowerTransitionPointY && positionY < higherTransitionPointY)
-				{
-					positionX = 10; return true;
-				}
-				return false;
-			}
-			break;
+		}
+		break;
 	}
-		
 
 
-	//if(positionX >= lowerTransitionPointX && positionX <= higherTransitionPointX)
-	//{
-	//	
-	//	if (positionX <= mapSizeX / 2) {
-	//		positionX = mapSizeX - playerSizeX * 4.5 - 10;
-	//		return true;
-	//	}
-	//	else {
-	//		positionX = 10;
-	//		return true;
-	//	}
-	//}
-	//else if (positionY >= lowerTransitionPointY && positionY <= higherTransitionPointY)
-	//{
-	//	if (positionY <= mapSizeY / 2) {
-	//		positionY = mapSizeY - playerSizeY * 4.5 - 10;
-	//		return true;
-	//	}
-	//	else {
-	//		positionY = 10;
-	//		return true;
-	//	}
-	//}
-	//else {
-	//	return false;
-	//}
+}
+bool Player::reachingHorizontalPlaceForMapChange(float TransitionPointY, float lowerTransitionPointX, float higherTransitionPointX, float mapSizeX, float mapSizeY)
+{
+	int side = 0;
+	if (TransitionPointY == 0) {
+		side = 0;
+	}
+	else
+		side = 1;
+
+	switch (side) {
+	case 0:
+		if (!(positionY <= TransitionPointY)) return false;
+		else {
+			if (positionX > lowerTransitionPointX && positionX < higherTransitionPointX)
+			{
+				positionY = mapSizeY - 145; return true;
+
+			}
+		}
+		return false;
+		break;
+	case 1:
+		if (!(positionY >= TransitionPointY)) return false;
+		else {
+			if (positionX > lowerTransitionPointX && positionX < higherTransitionPointX)
+			{
+				positionY = 10; return true;
+			}
+			return false;
+		}
+		break;
+	}
+
+
 }
