@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "Animation.h"
+#include "hitbox.h"
 #include "map.h"
 #include <string>
 #include <tuple>
@@ -99,9 +100,15 @@ int main()
 
     player.playerShape.setTexture(&playerTexture);
 	player.playerShape.setScale({ 4.5, 4.5 });
-    player.playerShape.setTextureRect(sf::IntRect({ 12, 2 }, { 26, 48 }));
+    player.playerShape.setTextureRect(sf::IntRect({ 12, 2 }, { 26, 48 })); //https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#object-hierarchies-scene-graph
     int idleSizeX = player.playerShape.getSize().x;
     int idleSizeY = player.playerShape.getSize().y;
+
+	hitbox playerHitbox;
+	playerHitbox.hitboxCreation(player.positionX, player.positionY, idleSizeX*4.5, idleSizeY*4.5);
+	playerHitbox.hitboxShape.setOutlineColor(Color::Black);
+	playerHitbox.hitboxShape.setOutlineThickness(1.f);
+    
     
 
     Animation idleAnimation(&playerTexture, Vector2u(5, 1), 0.15f);
@@ -139,6 +146,7 @@ int main()
        deltaTime = clock.restart().asSeconds();
        idleAnimation.Update(0, deltaTime);
        player.playerShape.setTextureRect(idleAnimation.uvRect);
+	   std::cout << idleSizeX << " " << idleSizeY << std::endl;
        
 	   
 
@@ -217,6 +225,7 @@ int main()
                 
                 window.setView(view);
                 player.move();
+				playerHitbox.hitboxUpdate(player.positionX, player.positionY);
                 player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
                 if (player.reachingVerticalPlaceForMapChange(0, 700, 1000, village.bgWidth, village.bgHeight))
                 {
@@ -230,6 +239,7 @@ int main()
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
+				window.draw(playerHitbox.hitboxShape);
                 std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
