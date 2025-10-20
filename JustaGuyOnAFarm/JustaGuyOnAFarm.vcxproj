@@ -136,7 +136,7 @@
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
-    <ClCompile Include="materials.cpp" />
+    <ClCompile Include="items.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="camera.cpp" />
   </ItemGroup>
@@ -144,7 +144,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="hitbox.h" />
     <ClInclude Include="map.h" />
-    <ClInclude Include="materials.h" />
+    <ClInclude Include="items.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="camera.h" />
   </ItemGroup>

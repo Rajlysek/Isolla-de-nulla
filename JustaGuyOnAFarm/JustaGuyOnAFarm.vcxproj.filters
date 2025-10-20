@@ -24,7 +24,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
-    <ClCompile Include="materials.cpp">
+    <ClCompile Include="items.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
@@ -44,7 +44,7 @@
     <ClInclude Include="Player.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
-    <ClInclude Include="materials.h">
+    <ClInclude Include="items.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">

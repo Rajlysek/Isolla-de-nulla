@@ -4,11 +4,15 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
-void hitbox::hitboxCreation(float posX, float posY, float sizX, float sizY)
+void hitbox::OuterHitboxCreation(float posX, float posY, float sizX, float sizY)
 {
 	hitboxShape.setSize({ sizX, sizY });
 	hitboxShape.setPosition({ posX, posY });
 	hitboxShape.setFillColor(sf::Color::Transparent);
+}
+void hitbox::OuterHitboxCreation() 
+{
+
 }
 void hitbox::hitboxUpdate(float posX, float posY)
 {

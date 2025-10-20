@@ -11,8 +11,10 @@ public:
 	float sizeX;
 	float sizeY;
 	sf::RectangleShape hitboxShape;
-	void hitboxCreation(float posX, float posY, float sizX, float sizY);
+	void OuterHitboxCreation(float posX, float posY, float sizX, float sizY);
 	void hitboxUpdate(float posX, float posY);
 	bool isColliding(const hitbox& other);
+	void OuterHitboxCreation();
+	bool itemPickuping(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox);
 };
 

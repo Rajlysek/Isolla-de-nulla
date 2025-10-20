@@ -10,6 +10,7 @@
 #include <string>
 #include <tuple>
 #include "camera.h"
+#include "items.h"
 using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
@@ -17,17 +18,12 @@ void buttonCreation(sf::RectangleShape& button, sf::Vector2f size, sf::Vector2f 
 void borderCollisionView(float playerPosX, float playerPosY, unsigned int windowSizeX, unsigned int windowSizeY, float backgroundSizeX, float backgroundSizeY);
 void update(float playerPosX, float playerPosY, sf::View& view);
 
-
 enum class gameState { menu, settings, game };
 //enum class State { Default = State::Default, Fullscreen = State::Fullscreen, Close = State::Close, None = Style::None };
 
-
-
-
-
 int main()
 {   
-	camera cam;
+	
 	// Create the main window and get desktop resolution
 	auto desktop = VideoMode::getDesktopMode();
     unsigned int width = desktop.size.x;
@@ -56,26 +52,25 @@ int main()
     buttonCreation(setttingsMenu, { 600.f, 400.f }, { 100.f,100.f });
     buttonTryAgain.setFillColor(Color::Red);
     setttingsMenu.setFillColor(Color::Blue);
-    
 
+	//camera creation
+    camera cam;
 
-
+	//test sprite
     Texture zkouskaTexture("blok.png");
 	Sprite zkouskaSprite(zkouskaTexture);
 	zkouskaSprite.setPosition(Vector2f(0, 0));
 	zkouskaSprite.setScale({ 2.f, 2.f });
-
-	
-
-
+    
+	//village map loading
     village.texture.loadFromFile("mapa.png");
     village.bgWidth = village.texture.getSize().x;
     village.bgHeight = village.texture.getSize().y;
-
+	
+    //farm map loading
 	farm.texture.loadFromFile("nothing.png");
     farm.bgWidth = farm.texture.getSize().x;
 	farm.bgHeight = farm.texture.getSize().y;
-
 
 	//background creations
     //Texture bg("mapa.png");
@@ -96,39 +91,31 @@ int main()
     //texture of the player
     Texture playerTexture;
     playerTexture.loadFromFile("IdleAnimace.png");
-   
-
+	//setting texture to player
     player.playerShape.setTexture(&playerTexture);
 	player.playerShape.setScale({ 4.5, 4.5 });
     player.playerShape.setTextureRect(sf::IntRect({ 12, 2 }, { 26, 48 })); //https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#object-hierarchies-scene-graph
     int idleSizeX = player.playerShape.getSize().x;
     int idleSizeY = player.playerShape.getSize().y;
 
-	hitbox playerHitbox;
-	playerHitbox.hitboxCreation(player.positionX, player.positionY, idleSizeX*4.5, idleSizeY*4.5);
-	playerHitbox.hitboxShape.setOutlineColor(Color::Black);
-	playerHitbox.hitboxShape.setOutlineThickness(1.f);
+    //player's hitbox creation and setting up
+    hitbox playerHitbox;
+    playerHitbox.OuterHitboxCreation(player.positionX, player.positionY, idleSizeX*4.5, idleSizeY*4.5);
+    playerHitbox.hitboxShape.setOutlineColor(Color::Black);
+    playerHitbox.hitboxShape.setOutlineThickness(1.f);
     
-    
-
     Animation idleAnimation(&playerTexture, Vector2u(5, 1), 0.15f);
     float deltaTime = 0.0f;
     Clock clock;
-
-
-	
-
+      
     //camera view
     View view;
 	view.setSize(Vector2f(width, height));
-    //až se hraè dostane za urcitou x a y pozici kamera zustane stát?
-    
+	// centering the view on the player at the start    
     View view2;
 	view2.setCenter(Vector2f(width / 2, height / 2));
 	view2.setSize(Vector2f(width, height));
-   
-
-    
+         
 	// Game state
     bool screenMenu = false;
     bool game = true;
@@ -137,29 +124,27 @@ int main()
     gameState currentState = gameState::menu;
 	MapState currentMap = MapState::village;
 
-    // Start the game loop
+    buttonCreation(buttonSettings, { buttonWidth, buttonHeight }, { menuWidth, menuHeight * 3 });
+    item item1;
+	RectangleShape itemShape;
+    item1.itemCreation(itemShape, {Vector2f( 48.f, 48.f )}, { 400.f, 400.f});
 
+    // Start the game loop
     while (window.isOpen())
 
     {
-       
-       deltaTime = clock.restart().asSeconds();
-       idleAnimation.Update(0, deltaTime);
-       player.playerShape.setTextureRect(idleAnimation.uvRect);
-	   std::cout << idleSizeX << " " << idleSizeY << std::endl;
-       
-	   
-
+        deltaTime = clock.restart().asSeconds();
+        idleAnimation.Update(0, deltaTime);
+        player.playerShape.setTextureRect(idleAnimation.uvRect);
+	    std::cout << idleSizeX << " " << idleSizeY << std::endl;
 		//mouse position and button collision
         Vector2i mousePos = sf::Mouse::getPosition(window);
-
         
         switch (currentState) {
         //menu
         case gameState::menu:
             if (buttonMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
             {
-                std::cout << "Click" << std::endl;
                 currentState = gameState::game;
             }
 
@@ -191,8 +176,6 @@ int main()
 
             break;
 
-
-
             //game
         case gameState::game:
             switch (currentMap) {
@@ -202,14 +185,6 @@ int main()
                 {
                     currentState = gameState::menu;
                 }
-
-                //if (player.positionX >= 2900  && player.positionY >= 0 && player.positionY <= 100) {
-                //    
-                //    player.positionChange(100.f, player.positionY);
-                //    currentMap = MapState::farm;
-                //
-				//	
-                //}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)){
                 
                     player.changeDirectionTexture(playerTexture, "WalkindIdleLeft.png");
@@ -221,7 +196,6 @@ int main()
                 else {
                     player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
 				}
-
                 
                 window.setView(view);
                 player.move();
@@ -234,12 +208,15 @@ int main()
                 if (player.reachingHorizontalPlaceForMapChange(0, 700, 1000, farm.bgWidth, farm.bgHeight))
                 {
                     currentMap = MapState::farm;
-                }
+                } 
+                item1.itemPickup(itemShape, playerHitbox.hitboxShape);
+				
                 cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
 				window.draw(playerHitbox.hitboxShape);
+				window.draw(itemShape);
                 std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
@@ -262,13 +239,6 @@ int main()
                     player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
                 }
 
-                //if (player.positionX >= 20 && player.positionY >= 0 && player.positionY <= 100) {
-                //
-                //    player.positionChange(2870.f, player.positionY);
-                //    currentMap = MapState::village;
-                //
-                //
-                //}
                 window.setView(view);
                 player.move();
                 player.borderCollision(farm.bgWidth, farm.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
@@ -291,36 +261,20 @@ int main()
             }
             break;
         }
-  
-
 
         // Process events
-         
         while (const std::optional event = window.pollEvent())
 
         {
-
             // Close window: exit
-
             if (event->is<Event::Closed>()) {
 
                 window.close();
 
             }
-
-        }
-        // Clear screen
-        //
-        
-        //draw
-       
-
-
-      
+        } 
         window.display();
         window.clear();
-
-
 
     }
 
