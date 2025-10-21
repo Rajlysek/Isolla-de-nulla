@@ -12,6 +12,8 @@ public:
 	sf::RectangleShape playerShape;
 	float playerSizeX;
 	float playerSizeY;
+	float playerCenterX;
+	float playerCenterY;
 	int health;
 	void move();
 	void borderCollision( float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY);

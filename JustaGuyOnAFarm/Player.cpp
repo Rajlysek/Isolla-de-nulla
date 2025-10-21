@@ -58,6 +58,8 @@ void Player::playerCreation(float posX, float posY)
 	positionY = posY;
 	playerShape.setSize({ 32.f, 32.f });
 	playerShape.setPosition({ positionX, positionY });
+	playerCenterX = playerShape.getSize().x / 2;
+	playerCenterY = playerShape.getSize().y / 2;
 	health = 100;
 }
 void Player::positionChange(float x, float y) {

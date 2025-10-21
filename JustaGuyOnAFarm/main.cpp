@@ -171,12 +171,12 @@ int main()
                 currentState = gameState::menu;
                 
             }
-            window.draw(setttingsMenu);
-            window.draw(buttonBack);
-
-            break;
-
-            //game
+           window.draw(setttingsMenu);
+           window.draw(buttonBack);
+           
+           break;
+           
+           //game
         case gameState::game:
             switch (currentMap) {
 			case MapState::village:
@@ -211,7 +211,7 @@ int main()
                 } 
                 item1.itemPickup(itemShape, playerHitbox.hitboxShape);
 				
-                cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+                cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
@@ -251,7 +251,7 @@ int main()
                     currentMap = MapState::village;
                 }
             
-                cam.borderCollisionView(player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+                cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(farmMap);
                 window.draw(player.playerShape);
                 std::cout << idleSizeX << std::endl;
