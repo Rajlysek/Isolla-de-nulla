@@ -136,7 +136,7 @@ int main()
         deltaTime = clock.restart().asSeconds();
         idleAnimation.Update(0, deltaTime);
         player.playerShape.setTextureRect(idleAnimation.uvRect);
-	    std::cout << idleSizeX << " " << idleSizeY << std::endl;
+	    std::cout << player.playerCenterX << " " << player.playerCenterY << std::endl;
 		//mouse position and button collision
         Vector2i mousePos = sf::Mouse::getPosition(window);
         
@@ -211,13 +211,15 @@ int main()
                 } 
                 item1.itemPickup(itemShape, playerHitbox.hitboxShape);
 				
-                cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+                //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+				view.setCenter(sf::Vector2f(player.playerCenterX,player.playerCenterY));
+                cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
 				window.draw(playerHitbox.hitboxShape);
 				window.draw(itemShape);
-                std::cout << idleSizeX << std::endl;
+               // std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
             

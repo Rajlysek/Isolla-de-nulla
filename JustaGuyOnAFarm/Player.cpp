@@ -28,6 +28,8 @@ void Player::move()
 	positionX += dx;
 	positionY += dy;
 	playerShape.setPosition({ positionX, positionY });
+	playerCenterX = positionX + (playerShape.getSize().x * 4.5) / 2;
+	playerCenterY = positionY + (playerShape.getSize().y * 4.5) / 2;
 }
 //player collison with the border
 void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY)
@@ -58,8 +60,8 @@ void Player::playerCreation(float posX, float posY)
 	positionY = posY;
 	playerShape.setSize({ 32.f, 32.f });
 	playerShape.setPosition({ positionX, positionY });
-	playerCenterX = playerShape.getSize().x / 2;
-	playerCenterY = playerShape.getSize().y / 2;
+	playerCenterX = positionX + (playerShape.getSize().x *4.5)/2;
+	playerCenterY = positionY + (playerShape.getSize().y*4.5) / 2;
 	health = 100;
 }
 void Player::positionChange(float x, float y) {

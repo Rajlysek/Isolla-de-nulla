@@ -12,56 +12,25 @@ void camera::update(float playerPosX, float playerPosY, sf::View& view)
 {
     view.setCenter(sf::Vector2(playerPosX, playerPosY));
 }
-void camera::borderCollisionView(float playerCenterX, float playerCenterY, float playerPosX, float playerPosY,unsigned int screenSizeX, unsigned int screenSizeY, float backgroundWidth, float backgroundHeight, sf::View& view)
+void camera::borderCollisionView(float playerCenterX, float playerCenterY, float playerPosX, float playerPosY,unsigned int screenSizeX, unsigned int screenSizeY, float backgroundWidth, float backgroundHeight, sf::View& view)//pres colission?
 {
-	if(playerPosX < screenSizeX / 2 && playerPosY < screenSizeY / 2 )
-	{
-		float cameraPosX = screenSizeX / 2;
-		float cameraPosY = screenSizeY / 2;
-		view.setCenter(sf::Vector2f(cameraPosX, cameraPosY));
-	}
-	else if (playerPosX > backgroundWidth - (screenSizeX / 2) && playerPosY > backgroundHeight - (screenSizeY / 2))
-	{
-		float cameraPosX = backgroundWidth - (screenSizeX / 2);
-		float cameraPosY = backgroundHeight - (screenSizeY / 2);
-		view.setCenter(sf::Vector2f(cameraPosX, cameraPosY));
-	}
-	else if (playerPosX < screenSizeX / 2 && playerPosY > backgroundHeight - (screenSizeY / 2)) {
-		float cameraPosX = screenSizeX / 2;
-		float cameraPosY = backgroundHeight - (screenSizeY / 2);
-		view.setCenter(sf::Vector2f(cameraPosX, cameraPosY));
-	}
-	else if(playerPosY < screenSizeY / 2 && playerPosX > backgroundWidth - (screenSizeX / 2))
-	{
-		float cameraPosY = screenSizeY / 2;
-		float cameraPosX = backgroundWidth - (screenSizeX / 2);
-		view.setCenter(sf::Vector2f(cameraPosX, cameraPosY));
-	}
-	else if (playerPosX < screenSizeX / 2)
-	{
-		float cameraPosX = screenSizeX / 2;
-		view.setCenter(sf::Vector2f(cameraPosX, playerPosY));
+	int lowerXHalf = screenSizeX / 2;
+	int lowerYHalf = screenSizeY / 2;
+	int biggerXHalf = backgroundWidth - lowerXHalf;
+	int biggerYHalf = backgroundHeight - lowerYHalf;
+	sf::Vector2f center = view.getCenter();
+	center.x = playerCenterX;
+	center.y = playerCenterY;
+	if(playerCenterX <= lowerXHalf) center.x = lowerXHalf;
+	if (playerCenterY <= lowerYHalf) center.y = lowerYHalf;
 
-	}
-	else if (playerPosY < screenSizeY / 2)
-	{
-		float cameraPosY = screenSizeY / 2;
-		view.setCenter(sf::Vector2f(playerPosX, cameraPosY));
+	if (playerCenterX >= biggerXHalf) center.x = biggerXHalf;
+	if (playerCenterY >= biggerYHalf) center.y = biggerYHalf;
 
-	}
-	else if (playerPosX > backgroundWidth - (screenSizeX / 2))
-	{
-		float cameraPosX = backgroundWidth - (screenSizeX / 2);
-		view.setCenter(sf::Vector2f(cameraPosX, playerPosY));
-	}
-	else if (playerPosY > backgroundHeight - (screenSizeY/2))
-	{
-		float cameraPosY = backgroundHeight - (screenSizeY / 2);
-		view.setCenter(sf::Vector2f(playerPosX, cameraPosY));
-	}
-	else
-	{ 
-		view.setCenter(sf::Vector2f(playerCenterX*4.5, playerCenterY*4.5));
-	}
+	view.setCenter(center);
+
+
+	
+
 	
 }
