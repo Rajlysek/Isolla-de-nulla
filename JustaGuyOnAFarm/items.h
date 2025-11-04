@@ -12,6 +12,6 @@ public:
 	float sizeX;
 	float sizeY;
 	void itemCreation(sf::RectangleShape& itemShape, sf::Vector2f size, sf::Vector2f position);
-	bool itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox);
+	void itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox);
 };
 

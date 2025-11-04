@@ -11,16 +11,15 @@ void item::itemCreation(sf::RectangleShape& itemShape, sf::Vector2f size, sf::Ve
 	itemShape.setPosition(position);
 	itemShape.setFillColor(sf::Color::Black);
 }
-bool item::itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox)
+void item::itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox)
 {
 	
 	
 	if (item.getGlobalBounds().findIntersection(PlayerOuterHitbox.getGlobalBounds()))			
 	{
 		std::cout << "Item picked up!" << std::endl;
-		return true;
-	}
-	else {
-		return false;
+		item.setFillColor(sf::Color::Transparent);
 	}
 }
+
+
