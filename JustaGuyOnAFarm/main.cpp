@@ -139,9 +139,10 @@ int main()
     RectangleShape itemShape2;
     item2.positionXCreation(village.bgWidth);
     item2.positionYCreation(village.bgHeight);
-    item2.itemCreation(itemShape, { Vector2f(48.f, 48.f) }, { Vector2f(item1.positionX, item1.positionY) });
+    item2.itemCreation(itemShape2, { Vector2f(48.f, 48.f) }, { Vector2f(item1.positionX, item1.positionY) });
     itemShape2.setFillColor(sf::Color::Red);
 
+   
     // Start the game loop
     while (window.isOpen())
 
