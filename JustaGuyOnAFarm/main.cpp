@@ -11,6 +11,7 @@
 #include <tuple>
 #include "camera.h"
 #include "items.h"
+#include <stdlib.h>     
 using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
@@ -66,6 +67,7 @@ int main()
     village.texture.loadFromFile("mapa.png");
     village.bgWidth = village.texture.getSize().x;
     village.bgHeight = village.texture.getSize().y;
+
 	
     //farm map loading
 	farm.texture.loadFromFile("nothing.png");
@@ -125,9 +127,20 @@ int main()
 	MapState currentMap = MapState::village;
 
     buttonCreation(buttonSettings, { buttonWidth, buttonHeight }, { menuWidth, menuHeight * 3 });
+
+	//item creation
     item item1;
 	RectangleShape itemShape;
-    item1.itemCreation(itemShape, {Vector2f( 48.f, 48.f )}, { 400.f, 400.f});
+    item1.positionXCreation(village.bgWidth);
+    item1.positionYCreation(village.bgHeight);
+    item1.itemCreation(itemShape, {Vector2f( 48.f, 48.f )}, { Vector2f(item1.positionX, item1.positionY)});
+
+    item item2;
+    RectangleShape itemShape2;
+    item2.positionXCreation(village.bgWidth);
+    item2.positionYCreation(village.bgHeight);
+    item2.itemCreation(itemShape, { Vector2f(48.f, 48.f) }, { Vector2f(item1.positionX, item1.positionY) });
+    itemShape2.setFillColor(sf::Color::Red);
 
     // Start the game loop
     while (window.isOpen())
@@ -180,7 +193,9 @@ int main()
         case gameState::game:
             switch (currentMap) {
 			case MapState::village:
-                
+				std::cout << rand() % int(village.bgHeight) + 1 << std::endl;
+				std::cout << item1.positionX << " 123 " << item1.positionY << std::endl;
+                std::cout << item2.positionX << " 456 " << item2.positionY << std::endl;
                 if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
                 {
                     currentState = gameState::menu;
@@ -219,6 +234,7 @@ int main()
                 window.draw(player.playerShape);
 				window.draw(playerHitbox.hitboxShape);
 				window.draw(itemShape);
+				window.draw(itemShape2);
                // std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;

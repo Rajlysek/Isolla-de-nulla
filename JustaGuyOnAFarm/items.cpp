@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <stdlib.h>     
 
 void item::itemCreation(sf::RectangleShape& itemShape, sf::Vector2f size, sf::Vector2f position)
 {
@@ -21,5 +22,14 @@ void item::itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterH
 		item.setFillColor(sf::Color::Transparent);
 	}
 }
+void item::positionXCreation(int screenSizeX){
+	positionX = rand() % screenSizeX + 1;
+}
+
+void item::positionYCreation(int screenSizeY) {
+
+	positionY = rand() % screenSizeY + 1;
+}
+
 
 
