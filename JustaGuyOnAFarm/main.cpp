@@ -11,7 +11,8 @@
 #include <tuple>
 #include "camera.h"
 #include "items.h"
-#include <stdlib.h>     
+#include <stdlib.h>
+#include <vector>
 using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
@@ -128,6 +129,17 @@ int main()
 
     buttonCreation(buttonSettings, { buttonWidth, buttonHeight }, { menuWidth, menuHeight * 3 });
 
+    std::vector<item> itemlist;
+    
+    for (int i = 0; i<20; i++ )
+    {
+        item item;
+        RectangleShape itemShape;
+        item.positionXCreation(village.bgWidth);
+        item.positionYCreation(village.bgHeight);
+        item.itemCreation(itemShape, { Vector2f(48.f, 48.f) }, { Vector2f(item.positionX, item.positionY) });
+        itemlist.push_back(item);
+    }
 	//item creation
     item item1;
 	RectangleShape itemShape;
@@ -139,7 +151,7 @@ int main()
     RectangleShape itemShape2;
     item2.positionXCreation(village.bgWidth);
     item2.positionYCreation(village.bgHeight);
-    item2.itemCreation(itemShape2, { Vector2f(48.f, 48.f) }, { Vector2f(item1.positionX, item1.positionY) });
+    item2.itemCreation(itemShape2, { Vector2f(48.f, 48.f) }, { Vector2f(item2.positionX, item2.positionY) });
     itemShape2.setFillColor(sf::Color::Red);
 
    
@@ -147,6 +159,7 @@ int main()
     while (window.isOpen())
 
     {
+        
         deltaTime = clock.restart().asSeconds();
         idleAnimation.Update(0, deltaTime);
         player.playerShape.setTextureRect(idleAnimation.uvRect);
@@ -180,6 +193,9 @@ int main()
        
          //setting       
         case gameState::settings:
+            for(const item& item: itemlist)
+            {
+            }
             if (buttonBack.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::settings)
             {
                 currentState = gameState::menu;
@@ -194,6 +210,7 @@ int main()
         case gameState::game:
             switch (currentMap) {
 			case MapState::village:
+
 				std::cout << rand() % int(village.bgHeight) + 1 << std::endl;
 				std::cout << item1.positionX << " 123 " << item1.positionY << std::endl;
                 std::cout << item2.positionX << " 456 " << item2.positionY << std::endl;

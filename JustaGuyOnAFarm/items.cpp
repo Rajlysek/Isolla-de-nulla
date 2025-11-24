@@ -11,6 +11,7 @@ void item::itemCreation(sf::RectangleShape& itemShape, sf::Vector2f size, sf::Ve
 	itemShape.setSize(size);
 	itemShape.setPosition(position);
 	itemShape.setFillColor(sf::Color::Black);
+	bool isVisible = true;
 }
 void item::itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox)
 {
