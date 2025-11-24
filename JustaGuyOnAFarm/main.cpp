@@ -239,14 +239,14 @@ int main()
                 cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(villageMap);
 				window.draw(zkouskaSprite);
-                window.draw(player.playerShape);
+               
 				window.draw(playerHitbox.hitboxShape);
 				
                 for(const item& item: itemlist)
                 {
                     window.draw(item.body);
                 }
-                
+                window.draw(player.playerShape);
                 // std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
