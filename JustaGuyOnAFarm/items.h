@@ -11,10 +11,13 @@ public:
 	float positionY;
 	float sizeX;
 	float sizeY;
-	void itemCreation(sf::RectangleShape& itemShape, sf::Vector2f size, sf::Vector2f position);
-	void itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox);
+	bool isVisible;
+	sf::RectangleShape body;
+	void itemCreation( sf::RectangleShape& itemShape, sf::Vector2f size, sf::Vector2f position);
+	void itemPickup( sf::RectangleShape& PlayerOuterHitbox);
 	void positionXCreation(int screenSizeX);	
 	void positionYCreation(int screenSizeY);
+	void checkingItemVisibility();
 
 };
 

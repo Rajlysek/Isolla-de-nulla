@@ -33,7 +33,7 @@ int main()
     float menuWidth = (int)width / 10 * 4;
     float menuHeight = (int)height / 10;
     float buttonWidth = (int)width / 10 * 2;
-    float buttonHeight = (int)height / 10;
+    float buttonHeight = (int)height / 10;  
     RenderWindow window(VideoMode({ width, height }), "SFML window", State::Fullscreen);
     window.setFramerateLimit(60);
 
@@ -134,36 +134,23 @@ int main()
     for (int i = 0; i<20; i++ )
     {
         item item;
-        RectangleShape itemShape;
+        item.body.setFillColor(sf::Color::Red);
         item.positionXCreation(village.bgWidth);
         item.positionYCreation(village.bgHeight);
-        item.itemCreation(itemShape, { Vector2f(48.f, 48.f) }, { Vector2f(item.positionX, item.positionY) });
+        item.itemCreation(item.body, { Vector2f(48.f, 48.f) }, { Vector2f(item.positionX, item.positionY) });
         itemlist.push_back(item);
     }
-	//item creation
-    item item1;
-	RectangleShape itemShape;
-    item1.positionXCreation(village.bgWidth);
-    item1.positionYCreation(village.bgHeight);
-    item1.itemCreation(itemShape, {Vector2f( 48.f, 48.f )}, { Vector2f(item1.positionX, item1.positionY)});
-
-    item item2;
-    RectangleShape itemShape2;
-    item2.positionXCreation(village.bgWidth);
-    item2.positionYCreation(village.bgHeight);
-    item2.itemCreation(itemShape2, { Vector2f(48.f, 48.f) }, { Vector2f(item2.positionX, item2.positionY) });
-    itemShape2.setFillColor(sf::Color::Red);
 
    
     // Start the game loop
     while (window.isOpen())
-
+        
     {
         
         deltaTime = clock.restart().asSeconds();
         idleAnimation.Update(0, deltaTime);
         player.playerShape.setTextureRect(idleAnimation.uvRect);
-	    std::cout << player.playerCenterX << " " << player.playerCenterY << std::endl;
+	   
 		//mouse position and button collision
         Vector2i mousePos = sf::Mouse::getPosition(window);
         
@@ -193,9 +180,7 @@ int main()
        
          //setting       
         case gameState::settings:
-            for(const item& item: itemlist)
-            {
-            }
+            
             if (buttonBack.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::settings)
             {
                 currentState = gameState::menu;
@@ -212,8 +197,6 @@ int main()
 			case MapState::village:
 
 				std::cout << rand() % int(village.bgHeight) + 1 << std::endl;
-				std::cout << item1.positionX << " 123 " << item1.positionY << std::endl;
-                std::cout << item2.positionX << " 456 " << item2.positionY << std::endl;
                 if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
                 {
                     currentState = gameState::menu;
@@ -242,8 +225,15 @@ int main()
                 {
                     currentMap = MapState::farm;
                 } 
-                item1.itemPickup(itemShape, playerHitbox.hitboxShape);
-				
+             
+                for(item& item : itemlist)
+                {
+                    item.checkingItemVisibility();
+                }
+                for (item& item : itemlist) 
+                {
+                    item.itemPickup(player.playerShape);
+                }
                 //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
 				view.setCenter(sf::Vector2f(player.playerCenterX,player.playerCenterY));
                 cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
@@ -251,9 +241,13 @@ int main()
 				window.draw(zkouskaSprite);
                 window.draw(player.playerShape);
 				window.draw(playerHitbox.hitboxShape);
-				window.draw(itemShape);
-				window.draw(itemShape2);
-               // std::cout << idleSizeX << std::endl;
+				
+                for(const item& item: itemlist)
+                {
+                    window.draw(item.body);
+                }
+                
+                // std::cout << idleSizeX << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
             

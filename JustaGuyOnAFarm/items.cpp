@@ -11,16 +11,26 @@ void item::itemCreation(sf::RectangleShape& itemShape, sf::Vector2f size, sf::Ve
 	itemShape.setSize(size);
 	itemShape.setPosition(position);
 	itemShape.setFillColor(sf::Color::Black);
-	bool isVisible = true;
+	isVisible = true;
 }
-void item::itemPickup(sf::RectangleShape& item, sf::RectangleShape& PlayerOuterHitbox)
+void item::checkingItemVisibility()
+{
+	if (isVisible == false) 
+	{
+		body.setFillColor(sf::Color::Transparent);
+	}
+	else {
+		body.setFillColor(sf::Color::Black);
+	}
+}
+void item::itemPickup(sf::RectangleShape& PlayerOuterHitbox)
 {
 	
-	
-	if (item.getGlobalBounds().findIntersection(PlayerOuterHitbox.getGlobalBounds()))			
-	{
-		std::cout << "Item picked up!" << std::endl;
-		item.setFillColor(sf::Color::Transparent);
+	if (isVisible){
+		if (body.getGlobalBounds().findIntersection(PlayerOuterHitbox.getGlobalBounds()) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+		{
+			isVisible = false;
+		}
 	}
 }
 void item::positionXCreation(int screenSizeX){
