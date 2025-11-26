@@ -30,3 +30,12 @@ void Animation::Update(int row, float deltaTime)
 	uvRect.position.x = currentImage.x * uvRect.size.x;
 	uvRect.position.y = currentImage.y * uvRect.size.y;
 }
+
+void Animation::SetFrame(unsigned int x, unsigned int y)
+{
+	currentImage.x = x;
+	currentImage.y = y;
+
+	uvRect.position.x = currentImage.x * uvRect.size.x;
+	uvRect.position.y = currentImage.y * uvRect.size.y;
+}
