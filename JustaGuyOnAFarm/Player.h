@@ -10,6 +10,8 @@ public:
 	float positionX;
 	float positionY;
 	sf::RectangleShape playerShape;
+	sf::RectangleShape playerInnerHitbox;
+	sf::RectangleShape playerOuterHitbox;
 	float playerSizeX;
 	float playerSizeY;
 	float playerCenterX;
@@ -23,6 +25,7 @@ public:
 	void changeDirectionTexture(sf::Texture& playerTexture, const std::filesystem::path& animationPicture);
 	bool reachingVerticalPlaceForMapChange(float TransitionPointX, float lowerTransitionPointY, float higherTransitionPointY, float mapSizeX, float mapSizeY);
 	bool reachingHorizontalPlaceForMapChange(float TransitionPointY, float lowerTransitionPointX, float higherTransitionPointX, float mapSizeX, float mapSizeY);
+	void playerInnerHitboxUpdate();
 };
 
 

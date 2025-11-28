@@ -63,6 +63,18 @@ void Player::playerCreation(float posX, float posY)
 	playerCenterX = positionX + (playerShape.getSize().x *4.5)/2;
 	playerCenterY = positionY + (playerShape.getSize().y*4.5) / 2;
 	health = 100;
+	playerSizeX = playerShape.getSize().x;
+	playerSizeY = playerShape.getSize().y;
+
+	playerInnerHitbox.setSize(sf::Vector2f(playerSizeX, playerSizeY));
+	playerInnerHitbox.setOutlineColor(sf::Color::Black);
+	playerInnerHitbox.setOutlineThickness(1);
+	playerInnerHitbox.setPosition(sf::Vector2f(playerCenterX -(playerSizeX/2), playerCenterY-(playerSizeY / 2)));
+	
+	playerOuterHitbox.setSize(sf::Vector2f(64, 64));
+	playerOuterHitbox.setOutlineColor(sf::Color::Red);
+	playerOuterHitbox.setOutlineThickness(1);
+	playerOuterHitbox.setPosition(sf::Vector2f(playerCenterX - playerSizeX, playerCenterY - playerSizeY));
 }
 void Player::positionChange(float x, float y) {
 	positionX = x;
@@ -159,4 +171,9 @@ bool Player::reachingHorizontalPlaceForMapChange(float TransitionPointY, float l
 	}
 
 
+}
+void Player::playerInnerHitboxUpdate()
+{
+	playerInnerHitbox.setPosition(sf::Vector2f(playerCenterX - (playerSizeX / 2), playerCenterY - (playerSizeY / 2)));
+	playerOuterHitbox.setPosition(sf::Vector2f(playerCenterX - playerSizeX, playerCenterY - playerSizeY));
 }

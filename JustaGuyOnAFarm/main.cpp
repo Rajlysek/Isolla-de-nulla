@@ -100,17 +100,20 @@ int main()
     int idleSizeX = player.playerShape.getSize().x;
     int idleSizeY = player.playerShape.getSize().y;
 
-    //player's hitbox creation and setting up
-    hitbox playerHitbox;
-    playerHitbox.OuterHitboxCreation(player.positionX, player.positionY, idleSizeX*4.5, idleSizeY*4.5);
-    playerHitbox.hitboxShape.setOutlineColor(Color::Black);
-    playerHitbox.hitboxShape.setOutlineThickness(1.f);
+    ////player's hitbox creation and setting up
+    //hitbox playerHitbox;
+    //playerHitbox.OuterHitboxCreation(player.positionX, player.positionY, idleSizeX*4.5, idleSizeY*4.5);
+    //playerHitbox.hitboxShape.setOutlineColor(Color::Black);
+    //playerHitbox.hitboxShape.setOutlineThickness(1.f);
     
     Animation idleAnimation(&playerTexture, Vector2u(4, 4), 0.15f);
     float deltaTime = 0.0f;
     Clock clock;
 
-   
+   /* sf::RectangleShape test;
+    test.setSize(sf::Vector2f(32.f, 32.f));
+    test.setPosition(sf::Vector2f(1500, 1500));
+    test.setFillColor(sf::Color::Black);*/
       
     //camera view
     View view;
@@ -147,7 +150,8 @@ int main()
     while (window.isOpen())
         
     {
-    
+        std::cout << player.playerSizeX << " " << player.playerSizeY << '\n';
+        
         deltaTime = clock.restart().asSeconds();
         
         player.playerShape.setTextureRect(idleAnimation.uvRect);
@@ -194,15 +198,15 @@ int main()
 
             //game
         case gameState::game:
+           
             switch (currentMap) {
             case MapState::village:
-                std::cout << AnimationRow << '\n';
-                std::cout << rand() % int(village.bgHeight) + 1 << std::endl;
                 if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
                 {
                     currentState = gameState::menu;
                 }
 
+                //changing sprite's smìr??
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 
@@ -222,7 +226,7 @@ int main()
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 
                     AnimationRow = 0;
-                    idleAnimation.Update(AnimationRow, deltaTime);
+                    idleAnimation.Update(AnimationRow, deltaTime);// update (whatrow to draw, delta time)
                 }
                 else if(AnimationRow == 0) {
                     idleAnimation.SetFrame(0, 0);
@@ -239,7 +243,7 @@ int main()
 
                  window.setView(view);
                  player.move();
-                 playerHitbox.hitboxUpdate(player.positionX, player.positionY);
+               
                  player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
                  if (player.reachingVerticalPlaceForMapChange(0, 700, 1000, village.bgWidth, village.bgHeight))
                  {
@@ -256,7 +260,7 @@ int main()
                  }
                  for (item& item : itemlist)
                  {
-                     item.itemPickup(player.playerShape);
+                     item.itemPickup(player.playerOuterHitbox);
                  }
                  //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                  view.setCenter(sf::Vector2f(player.playerCenterX, player.playerCenterY));
@@ -264,7 +268,11 @@ int main()
                  window.draw(villageMap);
                  window.draw(zkouskaSprite);
                  
-                 window.draw(playerHitbox.hitboxShape);
+            
+               
+                 player.playerInnerHitboxUpdate();
+                 window.draw(player.playerOuterHitbox);
+                 window.draw(player.playerInnerHitbox);
                  
 
                  for (const item& item : itemlist)
@@ -273,7 +281,8 @@ int main()
                  }
                  window.draw(player.playerShape);
                  // std::cout << idleSizeX << std::endl;
-                 std::cout << player.positionX << " " << player.positionY << std::endl;
+                
+
                  break;
 
             case MapState::farm:
@@ -309,6 +318,7 @@ int main()
                 cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                 window.draw(farmMap);
                 window.draw(player.playerShape);
+                window.draw(player.playerInnerHitbox);
                 std::cout << idleSizeX << std::endl;
                 std::cout << farm.bgWidth << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;

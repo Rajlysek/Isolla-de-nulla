@@ -34,12 +34,12 @@ void item::itemPickup(sf::RectangleShape& PlayerOuterHitbox)
 	}
 }
 void item::positionXCreation(int screenSizeX){
-	positionX = rand() % screenSizeX + 1;
+	positionX = rand() % (screenSizeX - 30) + 1;
 }
 
 void item::positionYCreation(int screenSizeY) {
 
-	positionY = rand() % screenSizeY + 1;
+	positionY = rand() % (screenSizeY-30) + 1;
 }
 
 
