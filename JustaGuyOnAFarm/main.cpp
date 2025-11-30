@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include "Animation.h"
 #include "hitbox.h"
 #include "map.h"
@@ -13,6 +14,18 @@
 #include "items.h"
 #include <stdlib.h>
 #include <vector>
+
+#include <tmxlite/Map.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include "SFMLOrthogonalLayer.hpp"
+
+
+
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
+
+
+
 using namespace sf;
 bool buttonsCollision(sf::RectangleShape button, sf::Vector2i mousePos);
 bool buttonsClicked(sf::RectangleShape button, sf::Vector2i mousePos);
@@ -21,13 +34,14 @@ void borderCollisionView(float playerPosX, float playerPosY, unsigned int window
 void update(float playerPosX, float playerPosY, sf::View& view);
 
 enum class gameState { menu, settings, game };
+
 //enum class State { Default = State::Default, Fullscreen = State::Fullscreen, Close = State::Close, None = Style::None };
 
 int main()
 {   
 	
 	// Create the main window and get desktop resolution
-	auto desktop = VideoMode::getDesktopMode();
+	auto desktop = VideoMode::getDesktopMode(); //zmenit na 1280x860 nebo tak nìco 
     unsigned int width = desktop.size.x;
     unsigned int height = desktop.size.y;
     float menuWidth = (int)width / 10 * 4;
@@ -75,6 +89,17 @@ int main()
     farm.bgWidth = farm.texture.getSize().x;
 	farm.bgHeight = farm.texture.getSize().y;
 
+    tmx::Map homeMap;
+    homeMap.load("maps/testmap.tmx");
+
+
+    MapLayer layerZero(homeMap, 0);
+    MapLayer layerOne(homeMap, 1);
+    MapLayer layerTwo(homeMap, 2);
+    MapLayer layerThree(homeMap, 3);
+
+    sf::Clock globalClock;
+
 	//background creationsa
     Sprite villageMap(village.texture);
     villageMap.setTexture(village.texture);
@@ -118,6 +143,7 @@ int main()
     //camera view
     View view;
 	view.setSize(Vector2f(width, height));
+    
 	// centering the view on the player at the start    
     View view2;
 	view2.setCenter(Vector2f(width / 2, height / 2));
@@ -129,6 +155,7 @@ int main()
     bool settings = false;
 
     gameState currentState = gameState::menu;
+    //gameState currentState = gameState::game;
 	MapState currentMap = MapState::village;
 
     buttonCreation(buttonSettings, { buttonWidth, buttonHeight }, { menuWidth, menuHeight * 3 });
@@ -144,12 +171,17 @@ int main()
         item.itemCreation(item.body, { Vector2f(48.f, 48.f) }, { Vector2f(item.positionX, item.positionY) });
         itemlist.push_back(item);
     }
-
+    float mapWidth = homeMap.getTileSize().x * homeMap.getTileCount().x;
+    float mapHeight = homeMap.getTileSize().y * homeMap.getTileCount().y;
     int AnimationRow = 0;
     // Start the game loop
     while (window.isOpen())
-        
+       
     {
+    
+
+
+        window.setKeyRepeatEnabled(false);
         std::cout << player.playerSizeX << " " << player.playerSizeY << '\n';
         
         deltaTime = clock.restart().asSeconds();
@@ -201,13 +233,101 @@ int main()
            
             switch (currentMap) {
             case MapState::village:
+                    if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
+                    {
+                        currentState = gameState::menu;
+                    }
+
+                    //changing sprite's smìr??
+
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+
+                        AnimationRow = 2;
+                        idleAnimation.Update(AnimationRow, deltaTime);
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+
+                        AnimationRow = 3;
+                        idleAnimation.Update(AnimationRow, deltaTime);
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+
+                        AnimationRow = 1;
+                        idleAnimation.Update(AnimationRow, deltaTime);
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+
+                        AnimationRow = 0;
+                        idleAnimation.Update(AnimationRow, deltaTime);// update (whatrow to draw, delta time)
+                    }
+                    else if(AnimationRow == 0) {
+                        idleAnimation.SetFrame(0, 0);
+                    }
+                    else if (AnimationRow == 1) {
+                        idleAnimation.SetFrame(0, 1);
+                    }
+                    else if (AnimationRow == 2) {
+                        idleAnimation.SetFrame(0, 2);
+                    }
+                    else if (AnimationRow == 3) {
+                        idleAnimation.SetFrame(0, 3);
+                    }
+
+                     window.setView(view);
+                     player.move();
+               
+                     player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
+                     if (player.reachingVerticalPlaceForMapChange(0, 700, 1000, village.bgWidth, village.bgHeight))
+                     {
+                         currentMap = MapState::farm;
+                     }
+                     if (player.reachingHorizontalPlaceForMapChange(0, 700, 1000, farm.bgWidth, farm.bgHeight))
+                     {
+                         currentMap = MapState::farm;
+                     }
+                 
+                     for (item& item : itemlist)
+                     {
+                         item.checkingItemVisibility();
+                     }
+                     for (item& item : itemlist)
+                     {
+                         item.itemPickup(player.playerOuterHitbox);
+                     }
+                     //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+                     view.setCenter(sf::Vector2f(player.playerCenterX, player.playerCenterY));
+                     cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+                     view.setViewport(sf::FloatRect({ 0.25f, 0.25 }, { 0.5f, 0.5f }));
+                     window.clear(sf::Color::Black);
+                     window.draw(layerZero);
+                     window.draw(layerOne);
+                     window.draw(layerTwo);
+                     window.draw(layerThree);
+                     window.draw(zkouskaSprite);
+                 
+                     
+                    
+                     player.playerInnerHitboxUpdate();
+                     window.draw(player.playerOuterHitbox);
+                     window.draw(player.playerInnerHitbox);
+                     //window.display();
+                 
+
+                     for (const item& item : itemlist)
+                     {
+                         window.draw(item.body);
+                     }
+                     window.draw(player.playerShape);
+                     // std::cout << idleSizeX << std::endl;
+                
+
+                     break;
+
+            case MapState::farm:
                 if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
                 {
                     currentState = gameState::menu;
                 }
-
-                //changing sprite's smìr??
-
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 
                     AnimationRow = 2;
@@ -228,7 +348,7 @@ int main()
                     AnimationRow = 0;
                     idleAnimation.Update(AnimationRow, deltaTime);// update (whatrow to draw, delta time)
                 }
-                else if(AnimationRow == 0) {
+                else if (AnimationRow == 0) {
                     idleAnimation.SetFrame(0, 0);
                 }
                 else if (AnimationRow == 1) {
@@ -239,68 +359,6 @@ int main()
                 }
                 else if (AnimationRow == 3) {
                     idleAnimation.SetFrame(0, 3);
-                }
-
-                 window.setView(view);
-                 player.move();
-               
-                 player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
-                 if (player.reachingVerticalPlaceForMapChange(0, 700, 1000, village.bgWidth, village.bgHeight))
-                 {
-                     currentMap = MapState::farm;
-                 }
-                 if (player.reachingHorizontalPlaceForMapChange(0, 700, 1000, farm.bgWidth, farm.bgHeight))
-                 {
-                     currentMap = MapState::farm;
-                 }
-                 
-                 for (item& item : itemlist)
-                 {
-                     item.checkingItemVisibility();
-                 }
-                 for (item& item : itemlist)
-                 {
-                     item.itemPickup(player.playerOuterHitbox);
-                 }
-                 //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
-                 view.setCenter(sf::Vector2f(player.playerCenterX, player.playerCenterY));
-                 cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
-                 window.draw(villageMap);
-                 window.draw(zkouskaSprite);
-                 
-            
-               
-                 player.playerInnerHitboxUpdate();
-                 window.draw(player.playerOuterHitbox);
-                 window.draw(player.playerInnerHitbox);
-                 
-
-                 for (const item& item : itemlist)
-                 {
-                     window.draw(item.body);
-                 }
-                 window.draw(player.playerShape);
-                 // std::cout << idleSizeX << std::endl;
-                
-
-                 break;
-
-            case MapState::farm:
-                if (Keyboard::isKeyPressed(Keyboard::Key::Escape) && game == true)
-                {
-                    currentState = gameState::menu;
-                }
-
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-
-                    player.changeDirectionTexture(playerTexture, "WalkindIdleLeft.png");
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-
-                    player.changeDirectionTexture(playerTexture, "WalkingIdleRight.png");
-                }
-                else {
-                    player.changeDirectionTexture(playerTexture, "IdleAnimace.png");
                 }
 
                 window.setView(view);
@@ -314,12 +372,15 @@ int main()
                 {
                     currentMap = MapState::village;
                 }
-
+                player.playerInnerHitboxUpdate();
+                
                 cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
+                
                 window.draw(farmMap);
-                window.draw(player.playerShape);
+                window.draw(player.playerOuterHitbox);
                 window.draw(player.playerInnerHitbox);
                 std::cout << idleSizeX << std::endl;
+                window.draw(player.playerShape);
                 std::cout << farm.bgWidth << std::endl;
                 std::cout << player.positionX << " " << player.positionY << std::endl;
                 break;
