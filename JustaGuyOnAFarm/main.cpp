@@ -48,7 +48,10 @@ int main()
     float menuHeight = (int)height / 10;
     float buttonWidth = (int)width / 10 * 2;
     float buttonHeight = (int)height / 10;  
+
     RenderWindow window(VideoMode({ width, height }), "SFML window", State::Fullscreen);
+    int resolutionX = 848;
+    int resolutionY = 480;
     window.setFramerateLimit(60);
 
 	//creating menu buttons and settings menu
@@ -90,7 +93,7 @@ int main()
 	farm.bgHeight = farm.texture.getSize().y;
 
     tmx::Map homeMap;
-    homeMap.load("maps/testmap.tmx");
+    homeMap.load("maps/domov.tmx");
 
 
     MapLayer layerZero(homeMap, 0);
@@ -111,8 +114,8 @@ int main()
 
     //player creations A
     Player player;
-	float playerCreationPosX = village.texture.getSize().x / 2;
-    float playerCreationPosY = village.texture.getSize().y / 2;
+	float playerCreationPosX = resolutionX / 2;
+    float playerCreationPosY = resolutionY / 2;
 	player.playerCreation(playerCreationPosX, playerCreationPosY);
 
     //texture of the player
@@ -120,7 +123,7 @@ int main()
     playerTexture.loadFromFile("Player_Spritesheet.png");
 	//setting texture to player
     player.playerShape.setTexture(&playerTexture);
-	player.playerShape.setScale({ 4.5, 4.5 });
+	player.playerShape.setScale({ 1.5, 1.5 });
     player.playerShape.setTextureRect(sf::IntRect({ 0, 0 }, { 48, 48 })); //https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#object-hierarchies-scene-graph
     int idleSizeX = player.playerShape.getSize().x;
     int idleSizeY = player.playerShape.getSize().y;
@@ -141,14 +144,14 @@ int main()
     test.setFillColor(sf::Color::Black);*/
       
     //camera view
-    View view;
-	view.setSize(Vector2f(width, height));
+    View view(sf::FloatRect({ 0.f, 0.f }, {sf::Vector2f(resolutionX, resolutionY)}));
+	//view.setSize(Vector2f(resolutionX, resolutionY));
     
 	// centering the view on the player at the start    
-    View view2;
-	view2.setCenter(Vector2f(width / 2, height / 2));
-	view2.setSize(Vector2f(width, height));
-         
+    
+	
+    View view2(sf::FloatRect({ 0.f, 0.f }, { sf::Vector2f(resolutionX, resolutionY) }));
+    view2.setCenter(Vector2f(resolutionX / 2, resolutionY / 2));
 	// Game state
     bool screenMenu = false;
     bool game = true;
@@ -296,8 +299,8 @@ int main()
                      }
                      //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                      view.setCenter(sf::Vector2f(player.playerCenterX, player.playerCenterY));
-                     cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
-                     view.setViewport(sf::FloatRect({ 0.25f, 0.25 }, { 0.5f, 0.5f }));
+                     cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, resolutionX, resolutionX, mapWidth,mapHeight, view);
+                     //view.setViewport(sf::FloatRect({ 0.25f, 0.25 }, { 0.5f, 0.5f }));
                      window.clear(sf::Color::Black);
                      window.draw(layerZero);
                      window.draw(layerOne);

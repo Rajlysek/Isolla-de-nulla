@@ -39,18 +39,18 @@ void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerS
 	{
 		positionX = 0;
 	}
-	if (positionX > windowSizeX - playerSizeX*4.5)
+	if (positionX > windowSizeX - playerSizeX)
 	{
 
-		positionX = windowSizeX - playerSizeX*4.5; //500 - 32
+		positionX = windowSizeX - playerSizeX; //500 - 32
 	}
 	if (positionY <= 0)
 	{
 		positionY = 0;
 	}
-	if (positionY >= WindowsizeY - playerSizeY*4.5)
+	if (positionY >= WindowsizeY - playerSizeY)
 	{
-		positionY = WindowsizeY - playerSizeY *4.5;
+		positionY = WindowsizeY - playerSizeY;
 	}
 }
 //vytvoreni hrace
@@ -60,8 +60,8 @@ void Player::playerCreation(float posX, float posY)
 	positionY = posY;
 	playerShape.setSize({ 32.f, 32.f });
 	playerShape.setPosition({ positionX, positionY });
-	playerCenterX = positionX + (playerShape.getSize().x *4.5)/2;
-	playerCenterY = positionY + (playerShape.getSize().y*4.5) / 2;
+	playerCenterX = positionX + (playerShape.getSize().x)/2;
+	playerCenterY = positionY + (playerShape.getSize().y) / 2;
 	health = 100;
 	playerSizeX = playerShape.getSize().x;
 	playerSizeY = playerShape.getSize().y;
