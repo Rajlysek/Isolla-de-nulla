@@ -39,19 +39,19 @@ enum class gameState { menu, settings, game };
 
 int main()
 {   
-	
+    int resolutionX = 640;
+    int resolutionY = 480;
 	// Create the main window and get desktop resolution
 	auto desktop = VideoMode::getDesktopMode(); //zmenit na 1280x860 nebo tak nÏco 
     unsigned int width = desktop.size.x;
-    unsigned int height = desktop.size.y;
-    float menuWidth = (int)width / 10 * 4;
-    float menuHeight = (int)height / 10;
-    float buttonWidth = (int)width / 10 * 2;
-    float buttonHeight = (int)height / 10;  
+    unsigned int height = desktop.size.y; 
+    float menuWidth = resolutionX/ 10 * 4;
+    float menuHeight = resolutionY / 10;
+    float buttonWidth = resolutionX/ 10 * 2;
+    float buttonHeight = resolutionY / 10;
 
     RenderWindow window(VideoMode({ width, height }), "SFML window", State::Fullscreen);
-    int resolutionX = 848;
-    int resolutionY = 480;
+
     window.setFramerateLimit(60);
 
 	//creating menu buttons and settings menu
@@ -79,7 +79,7 @@ int main()
     Texture zkouskaTexture("blok.png");
 	Sprite zkouskaSprite(zkouskaTexture);
 	zkouskaSprite.setPosition(Vector2f(0, 0));
-	zkouskaSprite.setScale({ 2.f, 2.f });
+	//zkouskaSprite.setScale({ 2.f, 2.f });
     
 	//village map loading
     village.texture.loadFromFile("mapa.png");
@@ -100,6 +100,8 @@ int main()
     MapLayer layerOne(homeMap, 1);
     MapLayer layerTwo(homeMap, 2);
     MapLayer layerThree(homeMap, 3);
+    MapLayer layerFour(homeMap, 4);
+    MapLayer layerFive(homeMap, 5);
 
     sf::Clock globalClock;
 
@@ -112,27 +114,25 @@ int main()
 	farmMap.setTexture(farm.texture);
 	farmMap.setPosition(Vector2f(0, 0));
 
-    //player creations A
-    Player player;
-	float playerCreationPosX = resolutionX / 2;
-    float playerCreationPosY = resolutionY / 2;
-	player.playerCreation(playerCreationPosX, playerCreationPosY);
-
     //texture of the player
     Texture playerTexture;
     playerTexture.loadFromFile("Player_Spritesheet.png");
+    
 	//setting texture to player
+
+    //player creations A
+    Player player;
     player.playerShape.setTexture(&playerTexture);
-	player.playerShape.setScale({ 1.5, 1.5 });
+	float playerCreationPosX = resolutionX / 2;
+    float playerCreationPosY = resolutionY / 2;
+	player.playerCreation(playerCreationPosX, playerCreationPosY, playerTexture);
+
+	//player.playerShape.setScale({ 1.5, 1.5 });
     player.playerShape.setTextureRect(sf::IntRect({ 0, 0 }, { 48, 48 })); //https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#object-hierarchies-scene-graph
     int idleSizeX = player.playerShape.getSize().x;
     int idleSizeY = player.playerShape.getSize().y;
 
-    ////player's hitbox creation and setting up
-    //hitbox playerHitbox;
-    //playerHitbox.OuterHitboxCreation(player.positionX, player.positionY, idleSizeX*4.5, idleSizeY*4.5);
-    //playerHitbox.hitboxShape.setOutlineColor(Color::Black);
-    //playerHitbox.hitboxShape.setOutlineThickness(1.f);
+
     
     Animation idleAnimation(&playerTexture, Vector2u(4, 4), 0.15f);
     float deltaTime = 0.0f;
@@ -142,17 +142,25 @@ int main()
     test.setSize(sf::Vector2f(32.f, 32.f));
     test.setPosition(sf::Vector2f(1500, 1500));
     test.setFillColor(sf::Color::Black);*/
-      
-    //camera view
+
+  
+    // Oprava konstrukce RectangleShape - spr·vn˝ konstruktor p¯ijÌm· pouze velikost, pozici nastavte zvl·öù
+    sf::RectangleShape Hitbox({ 24.f, 24.f });
+    Hitbox.setPosition(sf::Vector2f(player.playerCenterX, player.playerCenterY));
+    Hitbox.setFillColor(sf::Color::Red);
+    //camera view for player
     View view(sf::FloatRect({ 0.f, 0.f }, {sf::Vector2f(resolutionX, resolutionY)}));
+    
 	//view.setSize(Vector2f(resolutionX, resolutionY));
     
 	// centering the view on the player at the start    
     
-	
+	//camera view for menu
     View view2(sf::FloatRect({ 0.f, 0.f }, { sf::Vector2f(resolutionX, resolutionY) }));
     view2.setCenter(Vector2f(resolutionX / 2, resolutionY / 2));
 	// Game state
+
+
     bool screenMenu = false;
     bool game = true;
     bool settings = false;
@@ -181,36 +189,42 @@ int main()
     while (window.isOpen())
        
     {
+        std::cout << player.playerCenterX << " " << player.playerCenterY << std::endl;
+        std::cout << player.positionX<< " " << player.positionY << std::endl;
     
 
 
         window.setKeyRepeatEnabled(false);
-        std::cout << player.playerSizeX << " " << player.playerSizeY << '\n';
+      
         
         deltaTime = clock.restart().asSeconds();
         
         player.playerShape.setTextureRect(idleAnimation.uvRect);
 	   
 		//mouse position and button collision
-        Vector2i mousePos = sf::Mouse::getPosition(window);
-        
+        Vector2i mousePixel = sf::Mouse::getPosition(window);
+        Vector2f mousePos = window.mapPixelToCoords(mousePixel, view2);
+       
         switch (currentState) {
             //menu
         case gameState::menu:
             if (buttonMenu.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
             {
                 currentState = gameState::game;
+                std::cout << "buttonpressed" << std::endl;
             }
 
             if (buttonSettings.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
             {
                 currentState = gameState::settings;
+                std::cout << "buttonpressed" << std::endl;
             }
 
             if (buttonQuit.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::menu)
             {
                 window.close();
             }
+            
             window.setView(view2);
             window.draw(buttonMenu);
             window.draw(buttonSettings);
@@ -223,6 +237,7 @@ int main()
 
             if (buttonBack.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && currentState == gameState::settings)
             {
+                std::cout << "buttonpressed" << std::endl;
                 currentState = gameState::menu;
 
             }
@@ -277,9 +292,9 @@ int main()
                     }
 
                      window.setView(view);
-                     player.move();
+                     player.move(); 
                
-                     player.borderCollision(village.bgWidth, village.bgHeight, player.playerShape.getSize().x, player.playerShape.getSize().y);
+                     player.borderCollision(mapWidth, mapHeight, player.playerShape.getSize().x , player.playerShape.getSize().y);
                      if (player.reachingVerticalPlaceForMapChange(0, 700, 1000, village.bgWidth, village.bgHeight))
                      {
                          currentMap = MapState::farm;
@@ -299,18 +314,22 @@ int main()
                      }
                      //cam.borderCollisionView(player.playerSizeX, player.playerSizeY,player.positionX, player.positionY, width, height, village.bgWidth, village.bgHeight, view);
                      view.setCenter(sf::Vector2f(player.playerCenterX, player.playerCenterY));
-                     cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, resolutionX, resolutionX, mapWidth,mapHeight, view);
+                     cam.borderCollisionView(player.playerCenterX, player.playerCenterY, player.positionX, player.positionY, resolutionX, resolutionY, mapWidth,mapHeight, view);
                      //view.setViewport(sf::FloatRect({ 0.25f, 0.25 }, { 0.5f, 0.5f }));
                      window.clear(sf::Color::Black);
                      window.draw(layerZero);
                      window.draw(layerOne);
                      window.draw(layerTwo);
                      window.draw(layerThree);
-                     window.draw(zkouskaSprite);
+                     window.draw(layerFour);
+                     window.draw(layerFive);
+                    
                  
                      
                     
                      player.playerInnerHitboxUpdate();
+                     Hitbox.setPosition(sf::Vector2f(player.playerCenterX, player.playerCenterY));
+                     //window.draw(Hitbox);
                      window.draw(player.playerOuterHitbox);
                      window.draw(player.playerInnerHitbox);
                      //window.display();

@@ -19,7 +19,7 @@ public:
 	int health;
 	void move();
 	void borderCollision( float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY);
-	void playerCreation(float posX, float posY);
+	void playerCreation(float posX, float posY, sf::Texture& TextureOfPlayer);
 	void positionChange(float x, float y);
 	int directionOfPlayer();
 	void changeDirectionTexture(sf::Texture& playerTexture, const std::filesystem::path& animationPicture);

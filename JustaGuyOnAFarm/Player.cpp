@@ -9,7 +9,7 @@
 //long function that handles player movement and running with shift key and usage of pythagorean theorem for diagonal movement
 void Player::move()
 {
-	float speed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) ? 10.f : 6.f;
+	float speed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) ? 6.f : 3.f;
 	float diagonalSpeed = speed * 1.f;
 
 	float dx = 0.f;
@@ -28,8 +28,8 @@ void Player::move()
 	positionX += dx;
 	positionY += dy;
 	playerShape.setPosition({ positionX, positionY });
-	playerCenterX = positionX + (playerShape.getSize().x * 4.5) / 2;
-	playerCenterY = positionY + (playerShape.getSize().y * 4.5) / 2;
+	playerCenterX = positionX + playerShape.getSize().x / 2;
+	playerCenterY = positionY + playerShape.getSize().y / 2;
 }
 //player collison with the border
 void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerSizeX, float playerSizeY)
@@ -54,11 +54,11 @@ void Player::borderCollision(float windowSizeX, float WindowsizeY, float playerS
 	}
 }
 //vytvoreni hrace
-void Player::playerCreation(float posX, float posY)
+void Player::playerCreation(float posX, float posY, sf::Texture& TextureOfPlayer)
 {
 	positionX = posX;
 	positionY = posY;
-	playerShape.setSize({ 32.f, 32.f });
+	playerShape.setSize(sf::Vector2f (TextureOfPlayer.getSize().x / 4, TextureOfPlayer.getSize().y / 4));
 	playerShape.setPosition({ positionX, positionY });
 	playerCenterX = positionX + (playerShape.getSize().x)/2;
 	playerCenterY = positionY + (playerShape.getSize().y) / 2;
@@ -66,15 +66,16 @@ void Player::playerCreation(float posX, float posY)
 	playerSizeX = playerShape.getSize().x;
 	playerSizeY = playerShape.getSize().y;
 
-	playerInnerHitbox.setSize(sf::Vector2f(playerSizeX, playerSizeY));
+	
 	playerInnerHitbox.setOutlineColor(sf::Color::Black);
 	playerInnerHitbox.setOutlineThickness(1);
-	playerInnerHitbox.setPosition(sf::Vector2f(playerCenterX -(playerSizeX/2), playerCenterY-(playerSizeY / 2)));
 	
-	playerOuterHitbox.setSize(sf::Vector2f(64, 64));
+	playerInnerHitbox.setSize(sf::Vector2f(playerSizeX / 4, playerSizeX / 4));
+	
+	playerOuterHitbox.setSize(sf::Vector2f(playerSizeX / 2, playerSizeY / 2));
 	playerOuterHitbox.setOutlineColor(sf::Color::Red);
 	playerOuterHitbox.setOutlineThickness(1);
-	playerOuterHitbox.setPosition(sf::Vector2f(playerCenterX - playerSizeX, playerCenterY - playerSizeY));
+
 }
 void Player::positionChange(float x, float y) {
 	positionX = x;
@@ -174,6 +175,6 @@ bool Player::reachingHorizontalPlaceForMapChange(float TransitionPointY, float l
 }
 void Player::playerInnerHitboxUpdate()
 {
-	playerInnerHitbox.setPosition(sf::Vector2f(playerCenterX - (playerSizeX / 2), playerCenterY - (playerSizeY / 2)));
-	playerOuterHitbox.setPosition(sf::Vector2f(playerCenterX - playerSizeX, playerCenterY - playerSizeY));
+	playerInnerHitbox.setPosition(sf::Vector2f(playerCenterX - ((playerSizeX / 4) / 2), playerCenterY - ((playerSizeY / 4) / 2)));
+	playerOuterHitbox.setPosition(sf::Vector2f(playerCenterX - (playerSizeX / 4), playerCenterY - (playerSizeY / 4)));
 }

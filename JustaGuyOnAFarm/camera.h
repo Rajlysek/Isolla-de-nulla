@@ -11,6 +11,6 @@ public:
 	int positionX;
 	int positionY;
 	void update(float playerPosX, float playerPosY, sf::View& view);
-	void borderCollisionView(float playerCenterX, float playerCenterY, float playerPosX, float playerPosY, unsigned int screenSizeX, unsigned int screenSizeY, float backgroundWidth, float backgroundHeight, sf::View& view);
+	void borderCollisionView(float playerCenterX, float playerCenterY, float playerPosX, float playerPosY,  int screenSizeX,  int screenSizeY, float backgroundWidth, float backgroundHeight, sf::View& view);
 };
 

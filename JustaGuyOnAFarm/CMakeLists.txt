@@ -1,29 +1,27 @@
-cmake_minimum_required(VERSION 3.15)
-project(JustaGuyOnAFarm)
+cmake_minimum_required(VERSION 3.16)
 
-set(CMAKE_CXX_STANDARD 17)
+project(JustaGuyOnAFarm VERSION 1.0 LANGUAGES CXX)
+
+# Nastavení C++ standardu
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Pøidej všechny své hlavní zdrojáky
-add_executable(JustaGuyOnAFarm 
-    main.cpp        # tvùj hlavní cpp soubor
-    pugixml.cpp     # pugixml se kompiluje pøímo, žádné .lib
-    # sem mùžeš pøidat další cpp soubory tvé hry
-)
-
-
-# Pøidej složku s FindTMXLite.cmake a FindPugiXML.cmake
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/External/tmxlite-master/tmxlite/cmake/modules")
-
-# Najdi knihovny
-find_package(TMXLite REQUIRED)
-find_package(PugiXML REQUIRED)
-
-# Pøidej svùj projekt
+# Hlavní zdrojové soubory hry
 add_executable(JustaGuyOnAFarm
-    main.cpp
-    # pugixml.cpp pokud chceš kompilovat pøímo
+    src/main.cpp
+    src/player.cpp
+    src/game.cpp
+    # ... sem pøidej všechny další .cpp soubory
 )
 
-# Link knihovny
-target_link_libraries(JustaGuyOnAFarm PRIVATE TMXLite::TMXLite PugiXML::PugiXML)
+# Pøidání tmxlite jako subdirectory
+add_subdirectory(external/tmxlite)
+
+# Linkujeme tmxlite k projektu
+target_link_libraries(JustaGuyOnAFarm PRIVATE tmxlite-s)
+
+# Pøidání include cest
+target_include_directories(JustaGuyOnAFarm PRIVATE
+    include
+    external/tmxlite/include
+)
