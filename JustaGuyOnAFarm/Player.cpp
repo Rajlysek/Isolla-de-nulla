@@ -9,16 +9,16 @@
 //long function that handles player movement and running with shift key and usage of pythagorean theorem for diagonal movement
 void Player::move()
 {
-	float speed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) ? 6.f : 3.f;
+	float speed = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift) ? 4.f : 2.f;
 	float diagonalSpeed = speed * 1.f;
 
 	float dx = 0.f;
 	float dy = 0.f;	
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) dy -= speed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) dy += speed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) dx -= speed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) dx += speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) dy -= speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))dy += speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) dx -= speed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) dx += speed;
 
 	if (dx != 0.f && dy != 0.f) {
 		float length = std::sqrt(dx * dx + dy * dy);

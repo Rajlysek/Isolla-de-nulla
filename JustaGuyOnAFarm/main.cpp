@@ -15,10 +15,11 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <tmxlite/Map.hpp>
 #include <tmxlite/TileLayer.hpp>
 #include "SFMLOrthogonalLayer.hpp"
-
+#include <tmxlite/Map.hpp>
+#include <tmxlite/Layer.hpp>
+#include <tmxlite/ObjectGroup.hpp>
 
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -50,7 +51,7 @@ int main()
     float buttonWidth = resolutionX/ 10 * 2;
     float buttonHeight = resolutionY / 10;
 
-    RenderWindow window(VideoMode({ width, height }), "SFML window", State::Fullscreen);
+    RenderWindow window(VideoMode({ width, height }), "Isolla de Nulla", State::Fullscreen);
 
     window.setFramerateLimit(60);
 
@@ -258,22 +259,22 @@ int main()
 
                     //changing sprite's smìr??
 
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 
                         AnimationRow = 2;
                         idleAnimation.Update(AnimationRow, deltaTime);
                     }
-                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
 
                         AnimationRow = 3;
                         idleAnimation.Update(AnimationRow, deltaTime);
                     }
-                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
 
                         AnimationRow = 1;
                         idleAnimation.Update(AnimationRow, deltaTime);
                     }
-                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
 
                         AnimationRow = 0;
                         idleAnimation.Update(AnimationRow, deltaTime);// update (whatrow to draw, delta time)
