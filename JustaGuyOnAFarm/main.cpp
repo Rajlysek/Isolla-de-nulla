@@ -51,7 +51,7 @@ int main()
     float buttonWidth = resolutionX/ 10 * 2;
     float buttonHeight = resolutionY / 10;
 
-    RenderWindow window(VideoMode({ width, height }), "Isolla de Nulla", State::Fullscreen);
+        
 
     window.setFramerateLimit(60);
 
@@ -104,6 +104,21 @@ int main()
     MapLayer layerFour(homeMap, 4);
     MapLayer layerFive(homeMap, 5);
 
+
+
+    const auto& layers = homeMap.getLayers();
+    for (const auto& layer : layers)
+    {
+        if (layer->getType() == tmx::Layer::Type::Object)
+        {
+            const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+            const auto& objects = objectLayer.getObjects();
+            for (const auto& object : objects)
+            {
+
+                //do stuff with object properties
+            }
+        }
     sf::Clock globalClock;
 
 	//background creationsa
